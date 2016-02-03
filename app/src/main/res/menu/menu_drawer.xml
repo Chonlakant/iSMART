@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+
+
+        <item
+            android:id="@+id/home"
+            android:title="หน้าแรก" />
+
+
+        <item
+            android:id="@+id/course"
+            android:title="หลักสูตรทั้งหมด" />
+
+        <item
+            android:id="@+id/my_course"
+            android:title="หลักสูตรของฉัน" />
+        <item
+            android:id="@+id/enterprise"
+            android:title="การชำระเงิน" />
+
+        <item
+            android:id="@+id/a"
+            android:title="กระทู้รวม" />
+
+
+        <item
+            android:id="@+id/profile"
+            android:title="ประวัติส่วนตัว" />
+
+        <item
+            android:id="@+id/call"
+            android:title="การติดต่อเรา" />
+
+        <item
+            android:id="@+id/abount"
+            android:title="เกี่ยวกับเรา" />
+
+        <item
+            android:id="@+id/face_ipro"
+            android:title="Facebook Ipro" />
+
+
+
+        <!--<item-->
+        <!--android:id="@+id/login"-->
+        <!--android:title="Login" />-->
+        <!--<item-->
+        <!--android:id="@+id/logout"-->
+        <!--android:title="Logout" />-->
+        <!--<item-->
+        <!--android:id="@+id/about"-->
+        <!--android:title="@string/about" />-->
+
+
+    </group>
+
+
+</menu>
