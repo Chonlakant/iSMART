@@ -19,10 +19,6 @@
             android:id="@+id/enterprise"
             android:title="การชำระเงิน" />
 
-        <item
-            android:id="@+id/a"
-            android:title="กระทู้รวม" />
-
 
         <item
             android:id="@+id/profile"

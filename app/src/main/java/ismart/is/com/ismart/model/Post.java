@@ -1,12 +1,20 @@
 package ismart.is.com.ismart.model;
 
+import com.google.gson.annotations.SerializedName;
+
+import org.parceler.Parcel;
+
 import java.util.List;
 
 /**
  * Created by root1 on 12/20/15.
  */
+
 public class Post {
 
+    public Post(){
+
+    }
 
 
     private int status;
@@ -38,6 +46,8 @@ public class Post {
         return post;
     }
 
+
+    @Parcel
     public static class PostEntity {
         private String code;
         private String title;

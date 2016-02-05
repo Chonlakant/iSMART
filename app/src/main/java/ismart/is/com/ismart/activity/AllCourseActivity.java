@@ -1,5 +1,6 @@
 package ismart.is.com.ismart.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,8 +10,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.otto.Subscribe;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -64,6 +69,8 @@ public class AllCourseActivity extends AppCompatActivity {
     ArrayList<Post> listPurchase = new ArrayList<>();
     ArrayList<Post> listSale = new ArrayList<>();
     RecyclerView recList, cardList_production, cardList_safety, cardList_quality, cardList_logistics, cardList_management, cardList_iso, cardList_purchase, cardList;
+    TextView see_more_main, see_more_production, see_more_safety, see_more_quaity, see_more_logictics, see_more_management, see_more_iso,
+            see_more_purchase, see_more_sale;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -95,6 +102,13 @@ public class AllCourseActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
 
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                   finish();
+                }
+            });
+
         }
         recList = (RecyclerView) findViewById(R.id.cardList_main);
         cardList_production = (RecyclerView) findViewById(R.id.cardList_production);
@@ -105,6 +119,18 @@ public class AllCourseActivity extends AppCompatActivity {
         cardList_iso = (RecyclerView) findViewById(R.id.cardList_iso);
         cardList_purchase = (RecyclerView) findViewById(R.id.cardList_purchase);
         cardList = (RecyclerView) findViewById(R.id.cardList);
+
+        see_more_main = (TextView) findViewById(R.id.see_more_main);
+        see_more_production = (TextView) findViewById(R.id.see_more_production);
+        see_more_safety = (TextView) findViewById(R.id.see_more_safety);
+        see_more_quaity = (TextView) findViewById(R.id.see_more_quaity);
+        see_more_logictics = (TextView) findViewById(R.id.see_more_logictics);
+        see_more_management = (TextView) findViewById(R.id.see_more_management);
+        see_more_iso = (TextView) findViewById(R.id.see_more_iso);
+        see_more_purchase = (TextView) findViewById(R.id.see_more_purchase);
+        see_more_sale = (TextView) findViewById(R.id.see_more_sale);
+
+
         recList.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         LinearLayoutManager layoutManager1 = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -138,17 +164,95 @@ public class AllCourseActivity extends AppCompatActivity {
         myCourseRecyclerAdapterMain = new AllCourseRecyclerAdapter(getApplicationContext(), listMian);
         myCourseRecyclerAdapterPurchase = new AllCourseRecyclerAdapter(getApplicationContext(), listPurchase);
 
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            Dialog dialog;
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                dialog = new Dialog(Course_Activity.this, R.style.FullHeightDialog);
-//                dialog.setContentView(R.layout.dialog_check_user);
-//
-//
-//                dialog.show();
-//            }
-//        });
+        myCourseRecyclerAdapterProduction.SetOnItemVideiosClickListener(new AllCourseRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent i = new Intent(getApplicationContext(), SeeAllCourseActivity.class);
+                i.putExtra("listProduct", Parcels.wrap(listProduct));
+                startActivity(i);
+            }
+        });
+
+        see_more_main.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), SeeAllCourseActivity.class);
+                i.putExtra("key", "0");
+                startActivity(i);
+            }
+        });
+
+        see_more_production.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), SeeAllCourseActivity.class);
+                i.putExtra("key", "1");
+                startActivity(i);
+            }
+        });
+
+        see_more_safety.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), SeeAllCourseActivity.class);
+                i.putExtra("key", "2");
+                startActivity(i);
+            }
+        });
+
+        see_more_quaity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), SeeAllCourseActivity.class);
+                i.putExtra("key", "3");
+                startActivity(i);
+            }
+        });
+
+        see_more_logictics.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), SeeAllCourseActivity.class);
+                i.putExtra("key", "4");
+                startActivity(i);
+            }
+        });
+
+        see_more_management.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), SeeAllCourseActivity.class);
+                i.putExtra("key", "5");
+                startActivity(i);
+            }
+        });
+
+        see_more_iso.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), SeeAllCourseActivity.class);
+                i.putExtra("key", "6");
+                startActivity(i);
+            }
+        });
+
+        see_more_purchase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), SeeAllCourseActivity.class);
+                i.putExtra("key", "7");
+                startActivity(i);
+            }
+        });
+
+        see_more_sale.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), SeeAllCourseActivity.class);
+                i.putExtra("key", "8");
+                startActivity(i);
+            }
+        });
 
     }
 
@@ -211,7 +315,7 @@ public class AllCourseActivity extends AppCompatActivity {
     @Subscribe
     public void GetSafety(final SafetyReceivedEvent event) {
         if (event != null) {
-            for (int i = 0; i < event.getPost().getPost().size() ; i++) {
+            for (int i = 0; i < event.getPost().getPost().size(); i++) {
                 listSafetyt.add(event.getPost());
                 cardList_safety.setAdapter(myCourseRecyclerAdapterSafetyt);
             }

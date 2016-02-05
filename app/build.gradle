@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'com.neenbedankt.android-apt'
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -39,4 +39,8 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.0'
     compile 'com.jakewharton:butterknife:6.1.0'
     compile project(':vitamiolibs')
+    compile 'com.danikula:videocache:1.0.1'
+
+    compile "org.parceler:parceler-api:1.0.2"
+    apt "org.parceler:parceler:1.0.2"
 }

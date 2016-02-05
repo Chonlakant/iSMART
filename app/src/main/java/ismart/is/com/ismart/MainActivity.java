@@ -120,10 +120,6 @@ public class MainActivity extends AppCompatActivity {
                         drawerLayout.closeDrawers();
                         break;
 
-                    case R.id.a:
-                        finish();
-                        drawerLayout.closeDrawers();
-                        break;
 
                     default:
                         drawerLayout.closeDrawers();

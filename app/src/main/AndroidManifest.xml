@@ -24,6 +24,9 @@
         <activity android:name=".activity.MyCourseActivity"/>
         <activity android:name=".activity.MainActivityTap"/>
         <activity android:name=".activity.AllCourseActivity"/>
+        <activity android:name=".activity.VideoCacheActivity"/>
+        <activity android:name=".activity.SeeAllCourseActivity"/>
+        <activity android:name=".activity.DetailCourseActivity"/>
     </application>
 
 </manifest>
