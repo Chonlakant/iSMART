@@ -2,6 +2,7 @@ package ismart.is.com.ismart.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.media.AudioManager;
@@ -20,6 +21,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
@@ -80,7 +82,7 @@ public class DetailCourseActivity extends AppCompatActivity implements CacheList
     private View mTopView;
     private View mBottomView;
     private SeekBar mSeekBar;
-    private ImageView mPlay;
+    private ImageView mPlay,play_btn_play;
     private TextView mPlayTime,title;
     private TextView mDurationTime;
 
@@ -90,7 +92,7 @@ public class DetailCourseActivity extends AppCompatActivity implements CacheList
     private float height;
 
     private int playTime;
-
+    private Button button;
 
     private static final int HIDE_TIME = 5000;
 
@@ -118,10 +120,16 @@ public class DetailCourseActivity extends AppCompatActivity implements CacheList
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
-
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
         }
 
         volumnController = new VolumnController(this);
+        button = (Button) findViewById(R.id.button);
         mVideo = (FullScreenVideoView) findViewById(R.id.videoview);
         mPlayTime = (TextView) findViewById(R.id.play_time);
         mDurationTime = (TextView) findViewById(R.id.total_time);
@@ -130,7 +138,7 @@ public class DetailCourseActivity extends AppCompatActivity implements CacheList
         mTopView = findViewById(R.id.top_layout);
         mBottomView = findViewById(R.id.bottom_layout);
         title = (TextView) findViewById(R.id.title);
-
+        play_btn_play = (ImageView) findViewById(R.id.play_btn_play);
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         width = DensityUtil.getWidthInPx(this);
@@ -142,9 +150,20 @@ public class DetailCourseActivity extends AppCompatActivity implements CacheList
         mPlay.setOnClickListener(this);
         mSeekBar.setOnSeekBarChangeListener(mSeekBarChangeListener);
         title.setText(VIDEO_CACHE_NAME);
-       
 
-
+        play_btn_play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playVideo();
+            }
+        });
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(),VideoCacheActivity.class);
+                startActivity(i);
+            }
+        });
 
     }
 

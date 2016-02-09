@@ -43,8 +43,8 @@ import ismart.is.com.ismart.video.VolumnController;
 public class VideoCacheActivity extends Activity implements CacheListener,View.OnClickListener {
 
     private static final String LOG_TAG = "VideoActivity";
-    private static String VIDEO_CACHE_NAME ;
-    private static  String VIDEO_URL ;
+    private static String VIDEO_CACHE_NAME ="http://www.fieldandrurallife.tv/videos/Benltey%20Mulsanne.mp4";
+    private static  String VIDEO_URL = "http://www.fieldandrurallife.tv/videos/Benltey%20Mulsanne.mp4";
 
     //private static final String VIDEO_URL = "http://stream-1.vdomax.com:1935/vod/__definst__/mp4:110559/110559_720p.mp4/playlist.m3u8";
 
@@ -96,8 +96,8 @@ public class VideoCacheActivity extends Activity implements CacheListener,View.O
 //        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 //        progressBar.setMax(100);
 
-        VIDEO_URL = getIntent().getStringExtra("urlVideo");
-        VIDEO_CACHE_NAME = getIntent().getStringExtra("fileName");
+//        VIDEO_URL = getIntent().getStringExtra("urlVideo");
+//        VIDEO_CACHE_NAME = getIntent().getStringExtra("fileName");
 
         volumnController = new VolumnController(this);
         mVideo = (FullScreenVideoView) findViewById(R.id.videoview);

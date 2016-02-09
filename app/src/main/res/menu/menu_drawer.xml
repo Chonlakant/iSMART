@@ -5,34 +5,42 @@
 
         <item
             android:id="@+id/home"
+            android:icon="@drawable/home"
             android:title="หน้าแรก" />
 
 
         <item
             android:id="@+id/course"
+            android:icon="@drawable/list"
             android:title="หลักสูตรทั้งหมด" />
 
         <item
+            android:icon="@drawable/user_menu"
             android:id="@+id/my_course"
             android:title="หลักสูตรของฉัน" />
         <item
+            android:icon="@drawable/us"
             android:id="@+id/enterprise"
             android:title="การชำระเงิน" />
 
 
         <item
+            android:icon="@drawable/settings"
             android:id="@+id/profile"
-            android:title="ประวัติส่วนตัว" />
+            android:title="ตั้งค่า" />
 
         <item
+            android:icon="@drawable/phone"
             android:id="@+id/call"
             android:title="การติดต่อเรา" />
 
         <item
             android:id="@+id/abount"
+            android:icon="@drawable/about"
             android:title="เกี่ยวกับเรา" />
 
         <item
+            android:icon="@drawable/facebook"
             android:id="@+id/face_ipro"
             android:title="Facebook Ipro" />
 
