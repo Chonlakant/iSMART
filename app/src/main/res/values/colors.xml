@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#02a1a5</color>
-    <color name="colorPrimaryDark">#02a1a5</color>
-    <color name="colorAccent">#02a1a5</color>
+    <color name="colorPrimary">#9f021d</color>
+    <color name="colorPrimaryDark">#9f021d</color>
+    <color name="colorAccent">#9f021d</color>
+    <color name="material_drawer_dark_hint_text">#252525</color>
+    <color name="hint_text">#252525</color>
+    <color name="primary_text">#252525</color>
+    <color name="primary_dark">#252525</color>
+    <color name="list_divider">#dedede</color>
+    <color name="bg_bubble_self">#E1E1E1</color>
 </resources>

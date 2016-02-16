@@ -2,12 +2,15 @@ package ismart.is.com.ismart.activity;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
@@ -37,7 +40,7 @@ public class MainActivityTap extends BaseActivity implements OnFragmentInteracti
     public Integer userId;
 
     public Context mContext;
-
+    private Toolbar toolbar;
 
     @Override
     protected void onResume() {
@@ -53,9 +56,27 @@ public class MainActivityTap extends BaseActivity implements OnFragmentInteracti
         setContentView(R.layout.activity_main_tap);
         ButterKnife.inject(this);
         mContext = this;
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle("All Course");
+            toolbar.setTitleTextColor(Color.BLACK);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        }
+
 
         mViewpager.setPagingEnabled(false);
         setupViewPager(mViewpager);
+        mTabs.setTabTextColors(Color.WHITE,Color.WHITE);
         setupTabLayout(mTabs);
 
 

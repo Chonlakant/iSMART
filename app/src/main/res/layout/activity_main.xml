@@ -17,23 +17,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-
-
                     <include
                         android:id="@+id/toolbar"
                         layout="@layout/tool_bar" />
-
                     <com.daimajia.slider.library.SliderLayout
                         android:id="@+id/slider"
                         android:layout_width="match_parent"
@@ -41,7 +39,7 @@
                         custom:auto_cycle="true"
                         custom:indicator_visibility="visible"
                         custom:pager_animation_span="1100"
-                        android:layout_height="200dp"/>
+                        android:layout_height="180dp"/>
 
 
                     <android.support.v7.widget.RecyclerView

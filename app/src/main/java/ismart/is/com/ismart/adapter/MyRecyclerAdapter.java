@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import ismart.is.com.ismart.R;
+import ismart.is.com.ismart.RoundedTransformation;
 import ismart.is.com.ismart.model.listMain;
 
 public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.ContactViewHolder> {
@@ -43,13 +44,20 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Co
                 .load(imageUrl[i])
                 .fit().centerCrop()
                 .into(contactViewHolder.image_detail);
+
+        Picasso.with(context)
+                .load(imageUrl[0])
+                .centerCrop()
+                .resize(200, 200)
+                .transform(new RoundedTransformation(100, 4))
+                .into(contactViewHolder.profile_avatar);
     }
 
     @Override
     public ContactViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
-                inflate(R.layout.item_layout_main, viewGroup, false);
+                inflate(R.layout.item_feed_photo, viewGroup, false);
 
         return new ContactViewHolder(itemView);
     }
@@ -57,12 +65,13 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Co
     public static class ContactViewHolder extends RecyclerView.ViewHolder {
 
         TextView title_tv;
-        ImageView image_detail;
+        ImageView image_detail,profile_avatar;
 
         public ContactViewHolder(View v) {
             super(v);
             title_tv = (TextView) v.findViewById(R.id.title_tv);
             image_detail = (ImageView) v.findViewById(R.id.image_detail);
+            profile_avatar = (ImageView) v.findViewById(R.id.profile_avatar);
         }
     }
 }

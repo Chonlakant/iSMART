@@ -77,22 +77,26 @@ public class AllCourseActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_item_list, menu);
         return true;
     }
-
+    String cat;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        ApiBus.getInstance().postQueue(new LogisiticsRequestedEvent());
-        ApiBus.getInstance().postQueue(new QualityRequestedEvent());
-        ApiBus.getInstance().postQueue(new SafetyRequestedEvent());
-        ApiBus.getInstance().postQueue(new ProductionRequestedEvent());
-        ApiBus.getInstance().postQueue(new MaintenanceRequestedEvent());
-        ApiBus.getInstance().postQueue(new ManagementRequestedEvent());
-        ApiBus.getInstance().postQueue(new IsoRequestedEvent());
-        ApiBus.getInstance().postQueue(new PurchaseRequestedEvent());
-        ApiBus.getInstance().postQueue(new SafetyRequestedEvent());
-        ApiBus.getInstance().postQueue(new SaleRequestedEvent());
+        cat = getIntent().getStringExtra("cat");
+        if(cat.equals("2")){
+            ApiBus.getInstance().postQueue(new LogisiticsRequestedEvent());
+            ApiBus.getInstance().postQueue(new QualityRequestedEvent());
+            ApiBus.getInstance().postQueue(new SafetyRequestedEvent());
+            ApiBus.getInstance().postQueue(new ProductionRequestedEvent());
+            ApiBus.getInstance().postQueue(new MaintenanceRequestedEvent());
+            ApiBus.getInstance().postQueue(new ManagementRequestedEvent());
+            ApiBus.getInstance().postQueue(new IsoRequestedEvent());
+            ApiBus.getInstance().postQueue(new PurchaseRequestedEvent());
+            ApiBus.getInstance().postQueue(new SafetyRequestedEvent());
+            ApiBus.getInstance().postQueue(new SaleRequestedEvent());
+        }
+
 
         if (toolbar != null) {
             setSupportActionBar(toolbar);

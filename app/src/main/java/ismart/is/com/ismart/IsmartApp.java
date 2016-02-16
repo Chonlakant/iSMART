@@ -3,16 +3,23 @@ package ismart.is.com.ismart;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.squareup.okhttp.OkHttpClient;
 
 import java.io.File;
 
+import ismart.is.com.ismart.activity.LoginActivity;
 import ismart.is.com.ismart.event.ApiBus;
+import ismart.is.com.ismart.helper.MyPreferenceManager;
 import ismart.is.com.ismart.service.ApiHandler;
 import ismart.is.com.ismart.service.ApiService;
 import retrofit.RequestInterceptor;
@@ -24,27 +31,21 @@ import retrofit.RestAdapter;
  */
 public class IsmartApp extends Application implements Application.ActivityLifecycleCallbacks {
 
-
+    public static final String TAG = IsmartApp.class
+            .getSimpleName();
+    private RequestQueue mRequestQueue;
     public static final String API_ENDPOINT = "http://192.168.1.141";
 
     public static Activity currentActivity;
+    private MyPreferenceManager pref;
 
     private static IsmartApp Instance;
     public static volatile Handler applicationHandler = null;
     private ApiHandler someApiHandler;
 
-    public static final String APP_PERMISSIONS = "email,public_profile,user_friends";
     private static OkHttpClient sHttpClient;
-    private static Activity mFbHandleActivity;
     private static Context sContext = null;
 
-
-    public static Typeface CustomFontTypeFace() {
-        return Typeface.createFromAsset(getAppContext().getAssets(), "fonts/SWZ721BR.ttf");
-    }
-
-    String applicationID = "5UDvYSr2ngfrUVKo5G3cQUaaiTGakrIngAlXNhqC";
-    String clientKey = "f0RqCB5EYYuTVoGghacM2ITIxWHST5iUipg5y6vs";
 
     @Override
     public void onCreate() {
@@ -55,8 +56,6 @@ public class IsmartApp extends Application implements Application.ActivityLifecy
         applicationHandler = new Handler(getInstance().getMainLooper());
 
         saveInstallation(0);
-
-
 
 
         someApiHandler = new ApiHandler(this, buildApi(), ApiBus.getInstance());
@@ -80,10 +79,6 @@ public class IsmartApp extends Application implements Application.ActivityLifecy
         }
         return sHttpClient;
     }
-
-
-
-
 
 
     ApiService buildApi() {
@@ -110,12 +105,48 @@ public class IsmartApp extends Application implements Application.ActivityLifecy
 
     }
 
-    public static void logout(Context context) {
-
-    }
-
     public static IsmartApp get(Context context) {
         return (IsmartApp) context.getApplicationContext();
+    }
+
+    public RequestQueue getRequestQueue() {
+        if (mRequestQueue == null) {
+            mRequestQueue = Volley.newRequestQueue(getApplicationContext());
+        }
+
+        return mRequestQueue;
+    }
+
+    public MyPreferenceManager getPrefManager() {
+        if (pref == null) {
+            pref = new MyPreferenceManager(this);
+        }
+
+        return pref;
+    }
+
+    public <T> void addToRequestQueue(Request<T> req, String tag) {
+        req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
+        getRequestQueue().add(req);
+    }
+
+    public <T> void addToRequestQueue(Request<T> req) {
+        req.setTag(TAG);
+        getRequestQueue().add(req);
+    }
+
+    public void cancelPendingRequests(Object tag) {
+        if (mRequestQueue != null) {
+            mRequestQueue.cancelAll(tag);
+        }
+    }
+
+    public void logout(Context context) {
+        pref.clear();
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+
     }
 
     public static IsmartApp getInstance() {

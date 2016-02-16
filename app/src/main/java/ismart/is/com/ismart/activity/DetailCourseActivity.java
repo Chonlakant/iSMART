@@ -40,40 +40,34 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import ismart.is.com.ismart.R;
+import ismart.is.com.ismart.adapter.DetailRecyclerAdapter;
 import ismart.is.com.ismart.adapter.MyCourseRecyclerAdapter;
 import ismart.is.com.ismart.event.ActivityResultBus;
 import ismart.is.com.ismart.event.ApiBus;
+import ismart.is.com.ismart.event.MaintenanceReceivedEvent;
 import ismart.is.com.ismart.event.QualityReceivedEvent;
 import ismart.is.com.ismart.event.QualityRequestedEvent;
 import ismart.is.com.ismart.model.Post;
+import ismart.is.com.ismart.model.PostDetail;
 import ismart.is.com.ismart.video.DensityUtil;
 import ismart.is.com.ismart.video.FullScreenVideoView;
 import ismart.is.com.ismart.video.LightnessController;
 import ismart.is.com.ismart.video.VolumnController;
 
-public class DetailCourseActivity extends AppCompatActivity implements CacheListener,View.OnClickListener {
+public class DetailCourseActivity extends AppCompatActivity implements CacheListener, View.OnClickListener {
 
     private Toolbar toolbar;
-
+    DetailRecyclerAdapter detailRecyclerAdapter;
+    List<Post> list = new ArrayList<>();
 
     private static final String LOG_TAG = "VideoActivity";
-    private static String VIDEO_CACHE_NAME ;
-    private static  String VIDEO_URL ;
-
-    //private static final String VIDEO_URL = "http://stream-1.vdomax.com:1935/vod/__definst__/mp4:110559/110559_720p.mp4/playlist.m3u8";
-
-
-    //private static final String VIDEO_URL ="https://www.vdomax.com/clips/2015/05/X4gPz_110559_60765d771b815d6faadf2f978fb8fcfe_ori.mp4";
-
-    //private VideoView videoView;
-
-    //private String videoUrl = "https://www.vdomax.com/clips/2015/05/X4gPz_110559_60765d771b815d6faadf2f978fb8fcfe_ori.mp4";
-
-
+    private static String VIDEO_CACHE_NAME ="http://www.fieldandrurallife.tv/videos/Benltey%20Mulsanne.mp4";
+    private static  String VIDEO_URL = "http://www.fieldandrurallife.tv/videos/Benltey%20Mulsanne.mp4";
 
     private ProgressBar progressBar;
     private HttpProxyCache proxyCache;
@@ -82,8 +76,8 @@ public class DetailCourseActivity extends AppCompatActivity implements CacheList
     private View mTopView;
     private View mBottomView;
     private SeekBar mSeekBar;
-    private ImageView mPlay,play_btn_play;
-    private TextView mPlayTime,title;
+    private ImageView mPlay, play_btn_play;
+    private TextView mPlayTime, title;
     private TextView mDurationTime;
 
     private AudioManager mAudioManager;
@@ -107,11 +101,17 @@ public class DetailCourseActivity extends AppCompatActivity implements CacheList
         return true;
     }
 
+    RecyclerView recList;
+    String id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_detail);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        id = getIntent().getStringExtra("id");
+        Log.e("aaaa",id);
+       // ApiBus.getInstance().postQueue(new TrainningRequestedEvent(id));
 
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -127,6 +127,11 @@ public class DetailCourseActivity extends AppCompatActivity implements CacheList
                 }
             });
         }
+        recList = (RecyclerView) findViewById(R.id.cardList);
+        recList.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        recList.setLayoutManager(llm);
 
         volumnController = new VolumnController(this);
         button = (Button) findViewById(R.id.button);
@@ -155,12 +160,13 @@ public class DetailCourseActivity extends AppCompatActivity implements CacheList
             @Override
             public void onClick(View v) {
                 playVideo();
+                play_btn_play.setVisibility(View.GONE);
             }
         });
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(),VideoCacheActivity.class);
+                Intent i = new Intent(getApplicationContext(), VideoCacheActivity.class);
                 startActivity(i);
             }
         });
@@ -189,8 +195,19 @@ public class DetailCourseActivity extends AppCompatActivity implements CacheList
 
     }
 
+    @Subscribe
+    public void GetQuality(final MaintenanceReceivedEvent event) {
+        if (event != null) {
+            Log.e("bbbb", event.getPost().getPost().get(0).getTitle());
+            for (int i = 0; i < event.getPost().getPost().size(); i++) {
+                list.add(event.getPost());
+                detailRecyclerAdapter = new DetailRecyclerAdapter(getApplicationContext(), list);
+                recList.setAdapter(detailRecyclerAdapter);
+            }
 
+        }
 
+    }
 
     private void playVideo() {
 
@@ -392,8 +409,6 @@ public class DetailCourseActivity extends AppCompatActivity implements CacheList
     };
 
 
-
-
     private Runnable hideRunnable = new Runnable() {
 
         @Override
@@ -407,6 +422,7 @@ public class DetailCourseActivity extends AppCompatActivity implements CacheList
         DateFormat formatter = new SimpleDateFormat("mm:ss");
         return formatter.format(new Date(time));
     }
+
 
     private float mLastMotionX;
     private float mLastMotionY;

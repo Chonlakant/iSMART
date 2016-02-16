@@ -212,7 +212,9 @@ public class SeeAllCourseActivity extends AppCompatActivity {
             myCourseRecyclerAdapter.SetOnItemVideiosClickListener(new MyCourseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
+                    String id = list.get(position).getPost().get(position).getCode();
                     Intent i = new Intent(getApplicationContext(),DetailCourseActivity.class);
+                    i.putExtra("id",id);
                     startActivity(i);
                 }
             });
@@ -270,33 +272,7 @@ public class SeeAllCourseActivity extends AppCompatActivity {
         }
 
     }
-//
-//    @Subscribe
-//    public void getList(final QualityReceivedEvent event) {
-//        if (event != null) {
-//            Log.e("bbbbbbbb", event.getPost().getPost().size() + "");
-//            for (int i = 0; i < event.getPost().getPost().size(); i++) {
-//                list.add(event.getPost());
-//
-//            }
-//
-//
-//
-////            myCourseRecyclerAdapter.SetOnItemVideiosClickListener(new MyCourseRecyclerAdapter.OnItemClickListener() {
-////                Dialog dialog;
-////
-////                @Override
-////                public void onItemClick(View view, int position) {
-////                    Toast.makeText(getApplicationContext(), position + "", Toast.LENGTH_SHORT).show();
-////                    dialog = new Dialog(MyCourseActivity.this, R.style.FullHeightDialog);
-////                    dialog.setContentView(R.layout.dialog_check_user);
-////                    dialog.show();
-////                }
-////            });
-//
-//        }
-//
-//    }
+
 
 
     @Override

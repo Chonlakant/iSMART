@@ -25,6 +25,7 @@ import ismart.is.com.ismart.event.SafetyRequestedEvent;
 import ismart.is.com.ismart.event.SaleReceivedEvent;
 import ismart.is.com.ismart.event.SaleRequestedEvent;
 import ismart.is.com.ismart.model.Post;
+import ismart.is.com.ismart.model.PostDetail;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;

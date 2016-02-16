@@ -12,10 +12,6 @@ public class DrawerHeaderView extends FrameLayout {
     public DrawerHeaderView(Context context) {
         super(context);
         setup();
-    }
-
-    public DrawerHeaderView(Context context, AttributeSet attrs) {
-        super(context, attrs);
         ImageView user_image = (ImageView) findViewById(R.id.user_image);
 
         Picasso.with(context)
@@ -23,10 +19,16 @@ public class DrawerHeaderView extends FrameLayout {
                 .transform(new RoundedTransformation(50, 4))
                 .resize(100, 100)
                 .into(user_image);
+    }
+
+    public DrawerHeaderView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+
         setup();
     }
 
     private void setup() {
         inflate(getContext(), R.layout.navigation_header, this);
+
     }
 }

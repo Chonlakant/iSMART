@@ -1,6 +1,7 @@
 package ismart.is.com.ismart.activity;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -107,7 +108,20 @@ public class MyCourseActivity extends AppCompatActivity {
                 recList.setAdapter(myCourseRecyclerAdapter);
             }
 
+            myCourseRecyclerAdapter.SetOnItemVideiosClickListener(new MyCourseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+//                    Intent intent = new Intent(getApplicationContext(), MainActivityTap.class);
+//                    startActivity(intent);
 
+                    Intent intent = new Intent(getApplicationContext(), ChatRoomActivity.class);
+                    intent.putExtra("chat_room_id", "8");
+                    intent.putExtra("name", "Realtime Chat App");
+                    startActivity(intent);
+
+
+                }
+            });
 
 //            myCourseRecyclerAdapter.SetOnItemVideiosClickListener(new MyCourseRecyclerAdapter.OnItemClickListener() {
 //                Dialog dialog;
