@@ -1,33 +1,66 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:paddingTop="5dp"
+    android:gravity="right"
+    android:orientation="vertical"
+    android:paddingBottom="5dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp">
 
-    <TextView
-        android:id="@+id/message"
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="10dp"
-        android:textIsSelectable="true"
-        android:background="@drawable/bg_bubble_white"
-        android:textSize="14dp" />
+        android:layout_gravity="left"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/timestamp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/message"
-        android:layout_marginBottom="25dp"
-        android:layout_marginLeft="10dp"
-        android:paddingLeft="10dp"
-        android:paddingTop="6dp"
-        android:textSize="10dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
 
 
-</RelativeLayout>
+            <TextView
+                android:id="@+id/message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/bg_bubble_gray"
+                android:text="sdsdsdsdsdsd"
+                android:textIsSelectable="true"
+                android:textSize="20dp" />
+
+            <ImageView
+                android:id="@+id/image_content"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="right"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/cover_logo" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/timestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/message"
+                android:layout_gravity="left"
+                android:padding="10dp"
+                android:text="18980099"
+                android:textSize="10dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

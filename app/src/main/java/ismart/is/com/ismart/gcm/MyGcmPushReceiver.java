@@ -99,13 +99,14 @@ public class MyGcmPushReceiver extends GcmListenerService {
 
             try {
                 JSONObject datObj = new JSONObject(data);
-
                 String chatRoomId = datObj.getString("chat_room_id");
-
+                Log.e("rrrrr",datObj + "");
                 JSONObject mObj = datObj.getJSONObject("message");
                 Message message = new Message();
                 message.setMessage(mObj.getString("message"));
                 message.setId(mObj.getString("message_id"));
+                message.setImagUrl(mObj.optString("imgname"));
+
                 message.setCreatedAt(mObj.getString("created_at"));
 
                 JSONObject uObj = datObj.getJSONObject("user");
@@ -167,8 +168,10 @@ public class MyGcmPushReceiver extends GcmListenerService {
                 JSONObject datObj = new JSONObject(data);
 
                 String imageUrl = datObj.getString("image");
+                Log.e("TestImagev",imageUrl);
 
                 JSONObject mObj = datObj.getJSONObject("message");
+
                 Message message = new Message();
                 message.setMessage(mObj.getString("message"));
                 message.setId(mObj.getString("message_id"));

@@ -11,6 +11,7 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -49,4 +50,7 @@ dependencies {
     compile 'com.daimajia.slider:library:1.1.5@aar'
     compile 'com.mcxiaoke.volley:library-aar:1.0.0'
     compile "com.google.android.gms:play-services:8.3.0"
+    compile 'it.sephiroth.android.library.imagezoom:imagezoom:+'
+    compile 'com.android.support:multidex:1.0.0'
+    compile 'com.googlecode.android-query:android-query:0.24.3'
 }

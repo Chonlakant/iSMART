@@ -211,10 +211,9 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
                 switch (id) {
 
                     case R.id.home:
-                        Intent intent = new Intent(getApplicationContext(), ChatRoomActivity.class);
-                        intent.putExtra("chat_room_id", "8");
-                        intent.putExtra("name", "Realtime Chat App");
-                        startActivity(intent);
+                        Intent intent0 = new Intent(getApplicationContext(), ListActivity.class);
+                        intent0.putExtra("cat", "0");
+                        startActivity(intent0);
                         break;
                     case R.id.course:
                         Intent intent1 = new Intent(getApplicationContext(), ListActivity.class);
@@ -231,11 +230,37 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
                         drawerLayout.closeDrawers();
                         break;
 
-                    case R.id.profile:
-                        Intent intent2 = new Intent(getApplicationContext(), SettingActivity.class);
-                        startActivity(intent2);
+                    case R.id.enterprise:
+//                        Intent intent1 = new Intent(getApplicationContext(), MyCourseActivity.class);
+//                        startActivity(intent1);
+                        Intent intent4 = new Intent(getApplicationContext(), ListActivity.class);
+                        intent4.putExtra("cat", "3");
+                        startActivity(intent4);
                         drawerLayout.closeDrawers();
                         break;
+                    case R.id.success:
+//                        Intent intent1 = new Intent(getApplicationContext(), MyCourseActivity.class);
+//                        startActivity(intent1);
+                        Intent intent5 = new Intent(getApplicationContext(), ListActivity.class);
+                        intent5.putExtra("cat", "4");
+                        startActivity(intent5);
+                        drawerLayout.closeDrawers();
+                        break;
+
+
+//                    case R.id.profile:
+//                        Intent intent2 = new Intent(getApplicationContext(), SettingActivity.class);
+//                        startActivity(intent2);
+//                        drawerLayout.closeDrawers();
+//                        break;
+                    case R.id.call:
+                        Intent intent = new Intent(getApplicationContext(), ChatRoomActivity.class);
+                        intent.putExtra("chat_room_id", "8");
+                        intent.putExtra("name", "Realtime Chat App");
+                        startActivity(intent);
+                        drawerLayout.closeDrawers();
+                        break;
+
 
                     case R.id.logout:
                         IsmartApp.getInstance().logout(getApplicationContext());

@@ -6,18 +6,19 @@ import java.io.Serializable;
  * Created by Lincoln on 07/01/16.
  */
 public class ChatRoom implements Serializable {
-    String id, name, lastMessage, timestamp;
+    String id, name, lastMessage, timestamp, imagUrl;
     int unreadCount;
 
     public ChatRoom() {
     }
 
-    public ChatRoom(String id, String name, String lastMessage, String timestamp, int unreadCount) {
+    public ChatRoom(String id, String name, String lastMessage, String timestamp, int unreadCount,String imagUrl) {
         this.id = id;
         this.name = name;
         this.lastMessage = lastMessage;
         this.timestamp = timestamp;
         this.unreadCount = unreadCount;
+        this.imagUrl = imagUrl;
     }
 
     public String getId() {
@@ -58,5 +59,13 @@ public class ChatRoom implements Serializable {
 
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getImagUrl() {
+        return imagUrl;
+    }
+
+    public void setImagUrl(String imagUrl) {
+        this.imagUrl = imagUrl;
     }
 }

@@ -56,6 +56,8 @@ public class Post {
         private int status_img;
         private String OWNER;
         private String count;
+        private String layer;
+        private String link;
 
         public void setCode(String code) {
             this.code = code;
@@ -111,6 +113,22 @@ public class Post {
 
         public String getCount() {
             return count;
+        }
+
+        public String getLayer() {
+            return layer;
+        }
+
+        public void setLayer(String layer) {
+            this.layer = layer;
+        }
+
+        public String getLink() {
+            return link;
+        }
+
+        public void setLink(String link) {
+            this.link = link;
         }
     }
 }

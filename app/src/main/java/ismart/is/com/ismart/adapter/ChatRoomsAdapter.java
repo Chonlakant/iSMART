@@ -7,7 +7,10 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,6 +19,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import ismart.is.com.ismart.R;
+import ismart.is.com.ismart.RoundedTransformation;
 import ismart.is.com.ismart.model.ChatRoom;
 
 
@@ -28,12 +32,14 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView name, message, timestamp, count;
 
+
         public ViewHolder(View view) {
             super(view);
             name = (TextView) view.findViewById(R.id.name);
             message = (TextView) view.findViewById(R.id.message);
             timestamp = (TextView) view.findViewById(R.id.timestamp);
             count = (TextView) view.findViewById(R.id.count);
+
         }
     }
 
@@ -67,6 +73,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
         }
 
         holder.timestamp.setText(getTimeStamp(chatRoom.getTimestamp()));
+
     }
 
     @Override

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -139,6 +140,11 @@ public class IsmartApp extends Application implements Application.ActivityLifecy
         if (mRequestQueue != null) {
             mRequestQueue.cancelAll(tag);
         }
+    }
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     public void logout(Context context) {

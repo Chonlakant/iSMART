@@ -2,10 +2,15 @@ package ismart.is.com.ismart.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import ismart.is.com.ismart.Constant;
 import ismart.is.com.ismart.R;
 import ismart.is.com.ismart.model.Message;
 
@@ -23,17 +29,34 @@ public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private String userId;
     private int SELF = 100;
     private static String today;
-
+    private OnItemClickListener mItemClickListener;
     private Context mContext;
     private ArrayList<Message> messageArrayList;
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView message, timestamp;
+        ImageView image_content;
 
         public ViewHolder(View view) {
             super(view);
             message = (TextView) itemView.findViewById(R.id.message);
             timestamp = (TextView) itemView.findViewById(R.id.timestamp);
+            image_content = (ImageView) itemView.findViewById(R.id.image_content);
+            image_content.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+
+            switch (v.getId()) {
+                case R.id.image_content:
+                    if (mItemClickListener != null) {
+                        mItemClickListener.onItemClick(v, getPosition());
+                    }
+                    break;
+            }
+
+
         }
     }
 
@@ -81,19 +104,33 @@ public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         Message message = messageArrayList.get(position);
-        ((ViewHolder) holder).message.setText(message.getMessage());
-
+        String imageUrl = message.getImagUrl();
+        String url = Constant.enPointh + imageUrl;
         String timestamp = getTimeStamp(message.getCreatedAt());
+        String status = message.getStatus();
 
+        //Log.e("status", url);
+        ((ViewHolder) holder).message.setText(message.getMessage());
+        Picasso.with(mContext.getApplicationContext())
+                .load(url)
+                .into(((ViewHolder) holder).image_content);
         if (message.getUser().getName() != null)
             timestamp = message.getUser().getName() + ", " + timestamp;
-
         ((ViewHolder) holder).timestamp.setText(timestamp);
+
+
     }
 
     @Override
     public int getItemCount() {
         return messageArrayList.size();
+    }
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
+        this.mItemClickListener = mItemClickListener;
     }
 
     public static String getTimeStamp(String dateStr) {

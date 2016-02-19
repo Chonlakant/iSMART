@@ -40,4 +40,25 @@ public interface ApiService {
     @GET("/mn_com/service/course_list.php?cat=mk")
     void getSale(Callback<Post> callback);
 
+    @GET("/mn_com/community_service/select_art_list.php")
+    void getArticles(@Query("user")String id,Callback<Post> callback);
+
+    @GET("/mn_com/community_service/select_new.php")
+    void getNews(@Query("user")String id,Callback<Post> callback);
+
+    @GET("/mn_com/community_service/select_tip.php")
+    void getTip(@Query("user")String id,Callback<Post> callback);
+
+    @GET("/mn_com/community_service/select_train_list.php")
+    void getTraing(@Query("user")String id,Callback<Post> callback);
+
+    @GET("/mn_com/community_service/select_energy.php")
+    void getEnnigy(@Query("user")String id,Callback<Post> callback);
+
+    @GET("/mn_com/community_service/select_success.php")
+    void getSuccess(@Query("user")String id,Callback<Post> callback);
+
+
+
+
 }

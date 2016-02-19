@@ -34,6 +34,7 @@
         android:required="true" />
 
     <application
+
         android:name=".IsmartApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -100,6 +101,9 @@
         <!-- END Added for GCM -->
 
         <activity android:name=".activity.ListActivity" />
+        <activity android:name=".activity.PhotoActivity"/>
+        <activity android:name=".activity.ListWebViewActivity"/>
+        <activity android:name=".activity.ListLayer1Activity"/>
     </application>
 
 </manifest>

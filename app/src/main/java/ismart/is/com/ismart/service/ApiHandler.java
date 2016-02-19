@@ -6,6 +6,10 @@ import android.util.Log;
 import com.squareup.otto.Subscribe;
 
 import ismart.is.com.ismart.event.ApiBus;
+import ismart.is.com.ismart.event.ArticlesReceivedEvent;
+import ismart.is.com.ismart.event.ArticlesRequestedEvent;
+import ismart.is.com.ismart.event.EnnigyReceivedEvent;
+import ismart.is.com.ismart.event.EnningRequestedEvent;
 import ismart.is.com.ismart.event.IsoReceivedEvent;
 import ismart.is.com.ismart.event.IsoRequestedEvent;
 import ismart.is.com.ismart.event.LogisticsReceivedEvent;
@@ -14,6 +18,8 @@ import ismart.is.com.ismart.event.MaintenanceReceivedEvent;
 import ismart.is.com.ismart.event.MaintenanceRequestedEvent;
 import ismart.is.com.ismart.event.ManagemantReceivedEvent;
 import ismart.is.com.ismart.event.ManagementRequestedEvent;
+import ismart.is.com.ismart.event.NewsReceivedEvent;
+import ismart.is.com.ismart.event.NewsRequestedEvent;
 import ismart.is.com.ismart.event.ProductionReceivedEvent;
 import ismart.is.com.ismart.event.ProductionRequestedEvent;
 import ismart.is.com.ismart.event.PurchaseReceivedEvent;
@@ -24,6 +30,12 @@ import ismart.is.com.ismart.event.SafetyReceivedEvent;
 import ismart.is.com.ismart.event.SafetyRequestedEvent;
 import ismart.is.com.ismart.event.SaleReceivedEvent;
 import ismart.is.com.ismart.event.SaleRequestedEvent;
+import ismart.is.com.ismart.event.SuccessReceivedEvent;
+import ismart.is.com.ismart.event.SuccessRequestedEvent;
+import ismart.is.com.ismart.event.TipReceivedEvent;
+import ismart.is.com.ismart.event.TipRequestedEvent;
+import ismart.is.com.ismart.event.TraingReceivedEvent;
+import ismart.is.com.ismart.event.TraingRequestedEvent;
 import ismart.is.com.ismart.model.Post;
 import ismart.is.com.ismart.model.PostDetail;
 import retrofit.Callback;
@@ -60,7 +72,7 @@ public class ApiHandler {
 //                    for(int i = 0; i < post.getPost().size();i++){
 //                        ApiBus.getInstance().postQueue(new ImagesReceivedEvent(post));
 //                    }
-                    Log.e("ddddd", post.getPost().get(0).getDetails());
+
                     ApiBus.getInstance().postQueue(new LogisticsReceivedEvent(post));
                 }
 
@@ -84,7 +96,7 @@ public class ApiHandler {
 //                    for(int i = 0; i < post.getPost().size();i++){
 //                        ApiBus.getInstance().postQueue(new ImagesReceivedEvent(post));
 //                    }
-                    Log.e("ddddd", post.getPost().get(0).getDetails());
+
                     ApiBus.getInstance().postQueue(new QualityReceivedEvent(post));
                 }
 
@@ -108,7 +120,7 @@ public class ApiHandler {
 //                    for(int i = 0; i < post.getPost().size();i++){
 //                        ApiBus.getInstance().postQueue(new ImagesReceivedEvent(post));
 //                    }
-                    Log.e("ddddd", post.getPost().get(0).getDetails());
+
                     ApiBus.getInstance().postQueue(new SafetyReceivedEvent(post));
                 }
 
@@ -132,7 +144,7 @@ public class ApiHandler {
 //                    for(int i = 0; i < post.getPost().size();i++){
 //                        ApiBus.getInstance().postQueue(new ImagesReceivedEvent(post));
 //                    }
-                    Log.e("ddddd", post.getPost().get(0).getDetails());
+
                     ApiBus.getInstance().postQueue(new ProductionReceivedEvent(post));
                 }
 
@@ -156,7 +168,7 @@ public class ApiHandler {
 //                    for(int i = 0; i < post.getPost().size();i++){
 //                        ApiBus.getInstance().postQueue(new ImagesReceivedEvent(post));
 //                    }
-                    Log.e("ddddd", post.getPost().get(0).getDetails());
+
                     ApiBus.getInstance().postQueue(new MaintenanceReceivedEvent(post));
                 }
 
@@ -180,7 +192,7 @@ public class ApiHandler {
 //                    for(int i = 0; i < post.getPost().size();i++){
 //                        ApiBus.getInstance().postQueue(new ImagesReceivedEvent(post));
 //                    }
-                    Log.e("ddddd", post.getPost().get(0).getDetails());
+
                     ApiBus.getInstance().postQueue(new ManagemantReceivedEvent(post));
                 }
 
@@ -204,7 +216,7 @@ public class ApiHandler {
 //                    for(int i = 0; i < post.getPost().size();i++){
 //                        ApiBus.getInstance().postQueue(new ImagesReceivedEvent(post));
 //                    }
-                    Log.e("ddddd", post.getPost().get(0).getDetails());
+
                     ApiBus.getInstance().postQueue(new IsoReceivedEvent(post));
                 }
 
@@ -228,7 +240,7 @@ public class ApiHandler {
 //                    for(int i = 0; i < post.getPost().size();i++){
 //                        ApiBus.getInstance().postQueue(new ImagesReceivedEvent(post));
 //                    }
-                    Log.e("ddddd", post.getPost().get(0).getDetails());
+
                     ApiBus.getInstance().postQueue(new PurchaseReceivedEvent(post));
                 }
 
@@ -252,7 +264,7 @@ public class ApiHandler {
 //                    for(int i = 0; i < post.getPost().size();i++){
 //                        ApiBus.getInstance().postQueue(new ImagesReceivedEvent(post));
 //                    }
-                    Log.e("ddddd", post.getPost().get(0).getDetails());
+
                     ApiBus.getInstance().postQueue(new SaleReceivedEvent(post));
                 }
 
@@ -266,5 +278,92 @@ public class ApiHandler {
         });
     }
 
+    @Subscribe
+    public void onArticles(final ArticlesRequestedEvent event) {
+        api.getArticles(event.getVendor(), new Callback<Post>() {
+            @Override
+            public void success(Post post, Response response) {
+                ApiBus.getInstance().postQueue(new ArticlesReceivedEvent(post));
+            }
 
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+    @Subscribe
+    public void onNews(final NewsRequestedEvent event) {
+        api.getNews(event.getVendor(), new Callback<Post>() {
+            @Override
+            public void success(Post post, Response response) {
+                ApiBus.getInstance().postQueue(new NewsReceivedEvent(post));
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+    @Subscribe
+    public void onTip(final TipRequestedEvent event) {
+        api.getTip(event.getVendor(), new Callback<Post>() {
+            @Override
+            public void success(Post post, Response response) {
+                ApiBus.getInstance().postQueue(new TipReceivedEvent(post));
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+    @Subscribe
+    public void onTraing(final TraingRequestedEvent event) {
+        api.getTraing(event.getVendor(), new Callback<Post>() {
+            @Override
+            public void success(Post post, Response response) {
+                ApiBus.getInstance().postQueue(new TraingReceivedEvent(post));
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+    @Subscribe
+    public void onEning(final EnningRequestedEvent event) {
+        api.getEnnigy(event.getVendor(), new Callback<Post>() {
+            @Override
+            public void success(Post post, Response response) {
+                ApiBus.getInstance().postQueue(new EnnigyReceivedEvent(post));
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+    @Subscribe
+    public void onSuccess(final SuccessRequestedEvent event) {
+        api.getSuccess(event.getVendor(), new Callback<Post>() {
+            @Override
+            public void success(Post post, Response response) {
+                ApiBus.getInstance().postQueue(new SuccessReceivedEvent(post));
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
 }

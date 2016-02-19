@@ -60,6 +60,7 @@ import ismart.is.com.ismart.model.Message;
 import ismart.is.com.ismart.model.User;
 
 
+
 public class ChatRoomActivity extends AppCompatActivity {
 
     private String TAG = ChatRoomActivity.class.getSimpleName();
@@ -76,6 +77,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     String ba1 = "";
     Bitmap bm;
     String picturePath;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +90,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         chatRoomId = intent.getStringExtra("chat_room_id");
-       // String title = intent.getStringExtra("name");
+        // String title = intent.getStringExtra("name");
         String title = "Chat";
         getSupportActionBar().setTitle(title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -112,6 +114,18 @@ public class ChatRoomActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
+        mAdapter.SetOnItemClickListener(new ChatRoomThreadAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                String urlPhoto = messageArrayList.get(position).getImagUrl();
+                Log.e("urlPhoto", urlPhoto);
+                Intent intent = new Intent(getApplicationContext(), PhotoActivity.class);
+                intent.putExtra("current_item", position);
+                intent.putExtra("photos", urlPhoto);
+                startActivity(intent);
+            }
+        });
+
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -126,12 +140,10 @@ public class ChatRoomActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 sendMessage();
-
             }
         });
 
         fetchChatThread();
-
 
 
     }
@@ -156,11 +168,11 @@ public class ChatRoomActivity extends AppCompatActivity {
     /**
      * Handling new push message, will add the message to
      * recycler view and scroll it to bottom
-     * */
+     */
     private void handlePushNotification(Intent intent) {
         Message message = (Message) intent.getSerializableExtra("message");
         String chatRoomId = intent.getStringExtra("chat_room_id");
-
+     //   Toast.makeText(getApplicationContext(),"ddddd",Toast.LENGTH_SHORT).show();
         if (message != null && chatRoomId != null) {
             messageArrayList.add(message);
             mAdapter.notifyDataSetChanged();
@@ -174,7 +186,7 @@ public class ChatRoomActivity extends AppCompatActivity {
      * Posting a new message in chat room
      * will make an http call to our server. Our server again sends the message
      * to all the devices as push notification
-     * */
+     */
     private void sendMessage() {
         final String message = this.inputMessage.getText().toString().trim();
 
@@ -198,14 +210,16 @@ public class ChatRoomActivity extends AppCompatActivity {
 
                 try {
                     JSONObject obj = new JSONObject(response);
-
                     // check for error
                     if (obj.getBoolean("error") == false) {
                         JSONObject commentObj = obj.getJSONObject("message");
                         String commentId = commentObj.getString("message_id");
                         String commentText = commentObj.getString("message");
                         String createdAt = commentObj.getString("created_at");
+                        String imageUrl = commentObj.optString("imgname");
+                        String status = commentObj.optString("status");
 
+                        //Log.e("qqqq",imageUrl);
                         JSONObject userObj = obj.getJSONObject("user");
                         String userId = userObj.getString("user_id");
                         String userName = userObj.getString("name");
@@ -215,6 +229,8 @@ public class ChatRoomActivity extends AppCompatActivity {
                         message.setId(commentId);
                         message.setMessage(commentText);
                         message.setCreatedAt(createdAt);
+                        message.setImagUrl(imageUrl);
+                        message.setStatus(status);
                         message.setUser(user);
 
                         messageArrayList.add(message);
@@ -247,27 +263,129 @@ public class ChatRoomActivity extends AppCompatActivity {
 
             @Override
             protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+
+                params.put("user_id", IsmartApp.getInstance().getPrefManager().getUser().getId());
+                params.put("message", message);
+                params.put("base64", "false");
+                params.put("imgname", "false");
+                Log.e(TAG, "Params: " + params.toString());
+                params.put("status", "txt");
+
+                return params;
+            }
+
+            ;
+        };
+
+
+        // disabling retry policy so that it won't make
+        // multiple http calls
+        int socketTimeout = 0;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+
+        strReq.setRetryPolicy(policy);
+
+        //Adding request to request queue
+        IsmartApp.getInstance().addToRequestQueue(strReq);
+    }
+
+    private void sendMessagePhoto() {
+
+        String endPoint = EndPoints.CHAT_ROOM_MESSAGE.replace("_ID_", chatRoomId);
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                endPoint, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.e(TAG, "response: " + response);
+
+                try {
+                    JSONObject obj = new JSONObject(response);
+                    // check for error
+                    if (obj.getBoolean("error") == false) {
+                        JSONObject commentObj = obj.getJSONObject("message");
+                        String commentId = commentObj.getString("message_id");
+                        String commentText = commentObj.getString("message");
+                        String createdAt = commentObj.getString("created_at");
+                        String imageUrl = commentObj.optString("imgname");
+                        String status = commentObj.optString("status");
+
+                        //Log.e("qqqq",imageUrl);
+                        JSONObject userObj = obj.getJSONObject("user");
+                        String userId = userObj.getString("user_id");
+                        String userName = userObj.getString("name");
+                        User user = new User(userId, userName, null);
+
+                        Message message = new Message();
+                        message.setId(commentId);
+                        message.setMessage(commentText);
+                        message.setCreatedAt(createdAt);
+                        message.setImagUrl(imageUrl);
+                        message.setStatus(status);
+                        message.setUser(user);
+
+                        messageArrayList.add(message);
+
+                        mAdapter.notifyDataSetChanged();
+                        if (mAdapter.getItemCount() > 1) {
+                            // scrolling to bottom of the recycler view
+                            recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, mAdapter.getItemCount() - 1);
+                        }
+
+                    } else {
+                        Toast.makeText(getApplicationContext(), "" + obj.getString("message"), Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (JSONException e) {
+                    Log.e(TAG, "json parsing error: " + e.getMessage());
+                    Toast.makeText(getApplicationContext(), "json parse error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                NetworkResponse networkResponse = error.networkResponse;
+                Log.e(TAG, "Volley error: " + error.getMessage() + ", code: " + networkResponse);
+                Toast.makeText(getApplicationContext(), "Volley error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
 
                 if (bm != null) {
                     ByteArrayOutputStream bao = new ByteArrayOutputStream();
+
+                    float aspectRatio = bm.getWidth() /  (float) bm.getHeight();
+                    int width = 480;
+                    int height = Math.round(width / aspectRatio);
+
+                    bm = Bitmap.createScaledBitmap(bm,width,height,true);
                     bm.compress(Bitmap.CompressFormat.JPEG, 90, bao);
                     byte[] ba = bao.toByteArray();
                     ba1 = Base64.encodeBytes(ba);
 
                     Log.e("base64", "-----" + ba1);
+                    params.put("user_id", IsmartApp.getInstance().getPrefManager().getUser().getId());
+                    params.put("message", "รูปภาพ");
+                    params.put("base64", ba1);
+                    params.put("imgname", System.currentTimeMillis() + ".jpg");
+                    params.put("status", "photo");
+                    Log.e(TAG, "Params: " + params.toString());
+
                 }
 
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("user_id", IsmartApp.getInstance().getPrefManager().getUser().getId());
-                params.put("message", message);
-                params.put("base64", ba1);
-                params.put("imgname", System.currentTimeMillis() + ".jpg");
-
-
-                Log.e(TAG, "Params: " + params.toString());
 
                 return params;
-            };
+            }
+
+            ;
         };
 
 
@@ -287,7 +405,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
     /**
      * Fetching all the messages of a single chat room
-     * */
+     */
     private void fetchChatThread() {
 
         String endPoint = EndPoints.CHAT_THREAD.replace("_ID_", chatRoomId);
@@ -309,10 +427,14 @@ public class ChatRoomActivity extends AppCompatActivity {
 
                         for (int i = 0; i < commentsObj.length(); i++) {
                             JSONObject commentObj = (JSONObject) commentsObj.get(i);
-                            Log.e("ddddd",commentObj.toString());
+                            Log.e("commentObj", commentObj + "");
                             String commentId = commentObj.getString("message_id");
                             String commentText = commentObj.getString("message");
                             String createdAt = commentObj.getString("created_at");
+                            String imageUrl = commentObj.optString("cht_image");
+                            String status = commentObj.optString("status");
+                            Log.e("fetchChatThread", imageUrl);
+                            Log.e("StatusApater", status);
 
                             JSONObject userObj = commentObj.getJSONObject("user");
                             String userId = userObj.getString("user_id");
@@ -323,6 +445,8 @@ public class ChatRoomActivity extends AppCompatActivity {
                             message.setId(commentId);
                             message.setMessage(commentText);
                             message.setCreatedAt(createdAt);
+                            message.setImagUrl(imageUrl);
+                            message.setStatus(status);
                             message.setUser(user);
 
                             messageArrayList.add(message);
@@ -362,7 +486,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ChatRoomActivity.this);
 
-        builder.setTitle("Select Photo");
+        builder.setTitle("Choose from Gallery");
 
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
@@ -458,12 +582,14 @@ public class ChatRoomActivity extends AppCompatActivity {
                 bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
                         bitmap.getHeight(), matrix, true);
 
-                bm =  Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+                bm = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
                         bitmap.getHeight(), matrix, true);
 
-                Log.e("aaaa",bm+"");
+                Log.e("aaaa", bm + "");
 
-               // mImageView.setImageBitmap(bitmap);
+                sendMessagePhoto();
+
+                // mImageView.setImageBitmap(bitmap);
                 //storeImageTosdCard(bitmap);
             } catch (Exception e) {
                 // TODO Auto-generated catch block
@@ -491,7 +617,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 //            mImageView.setVisibility(View.VISIBLE);
 //            mImageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
             bm = BitmapFactory.decodeFile(picturePath);
-
+            sendMessagePhoto();
         }
     }
 

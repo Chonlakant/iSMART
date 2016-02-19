@@ -168,6 +168,7 @@ public class MainActivity2GCM extends AppCompatActivity {
             if (cr.getId().equals(chatRoomId)) {
                 int index = chatRoomArrayList.indexOf(cr);
                 cr.setLastMessage(message.getMessage());
+                cr.setImagUrl(message.getImagUrl());
                 cr.setUnreadCount(cr.getUnreadCount() + 1);
                 chatRoomArrayList.remove(index);
                 chatRoomArrayList.add(index, cr);

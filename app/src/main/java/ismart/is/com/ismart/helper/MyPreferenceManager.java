@@ -32,6 +32,7 @@ public class MyPreferenceManager {
     private static final String KEY_USER_ID = "user_id";
     private static final String KEY_USER_NAME = "user_name";
     private static final String KEY_USER_EMAIL = "user_email";
+    private static final String KEY_USER_PHOTO = "user_photo";
     private static final String KEY_NOTIFICATIONS = "notifications";
 
     // Constructor
@@ -53,11 +54,10 @@ public class MyPreferenceManager {
 
     public User getUser() {
         if (pref.getString(KEY_USER_ID, null) != null) {
-            String id, name, email;
+            String id, name, email,photo;
             id = pref.getString(KEY_USER_ID, null);
             name = pref.getString(KEY_USER_NAME, null);
             email = pref.getString(KEY_USER_EMAIL, null);
-
             User user = new User(id, name, email);
             return user;
         }

@@ -24,7 +24,7 @@
 
 
         <item
-            android:id="@+id/profile"
+            android:id="@+id/success"
             android:icon="@drawable/settings"
             android:title="Success Story" />
 
