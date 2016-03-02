@@ -91,7 +91,7 @@ public class RegisterActivity extends AppCompatActivity{
         loadingDialog.setContentView(R.layout.dialog_loading);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
-            getSupportActionBar().setTitle("Course");
+            getSupportActionBar().setTitle("Register");
             toolbar.setTitleTextColor(Color.BLACK);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -168,12 +168,29 @@ public class RegisterActivity extends AppCompatActivity{
         Log.e("qqq", pass);
         Log.e("www", pass);
         loadingDialog.show();
-        if (TextUtils.isEmpty(pass)) {
-            Toast.makeText(getApplicationContext(), "ผิดพลาด", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(email)) {
+            loadingDialog.dismiss();
+            Toast.makeText(getApplicationContext(), "กรุณาใส่อีเมล์", Toast.LENGTH_SHORT).show();
             return;
         }
         if (TextUtils.isEmpty(pass)) {
-            Toast.makeText(getApplicationContext(), "ผิดพลาด", Toast.LENGTH_SHORT).show();
+            loadingDialog.dismiss();
+            Toast.makeText(getApplicationContext(), "กรุณาใส่พาสเวิร์ด", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(name)) {
+            loadingDialog.dismiss();
+            Toast.makeText(getApplicationContext(), "กรุณาใส่ชื่อ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(company)) {
+            loadingDialog.dismiss();
+            Toast.makeText(getApplicationContext(), "กรุณาใส่บริษัท", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(phone)) {
+            loadingDialog.dismiss();
+            Toast.makeText(getApplicationContext(), "กรุณาใส่เบอร์โทรศัพท์", Toast.LENGTH_SHORT).show();
             return;
         }
         String url = "http://mn-community.com/web/register_short.php";
@@ -209,7 +226,8 @@ public class RegisterActivity extends AppCompatActivity{
         // storing user in shared preferences
 
         if (success == 0) {
-            Toast.makeText(getApplicationContext(), "ลงทะเบียนไม่สำเร็จ", Toast.LENGTH_SHORT).show();
+            loadingDialog.dismiss();
+            Toast.makeText(getApplicationContext(), "ลงทะเบียนไม่สำเร็จ/อีเมล์ซ้ำ", Toast.LENGTH_SHORT).show();
         }
         if (success == 1) {
             loadingDialog.dismiss();

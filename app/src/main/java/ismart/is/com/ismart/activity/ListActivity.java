@@ -52,6 +52,8 @@ import ismart.is.com.ismart.event.SaleReceivedEvent;
 import ismart.is.com.ismart.event.SaleRequestedEvent;
 import ismart.is.com.ismart.event.SuccessReceivedEvent;
 import ismart.is.com.ismart.event.SuccessRequestedEvent;
+import ismart.is.com.ismart.event.TipReceivedEvent;
+import ismart.is.com.ismart.event.TipRequestedEvent;
 import ismart.is.com.ismart.model.Post;
 
 public class ListActivity extends AppCompatActivity {
@@ -70,6 +72,7 @@ public class ListActivity extends AppCompatActivity {
     ListCourseRecyclerAdapter isRecyclerAdapter;
     ListCourseRecyclerAdapter pcRecyclerAdapter;
     ListCourseRecyclerAdapter whRecyclerAdapter;
+    ListCourseRecyclerAdapter tipRecyclerAdapter;
 
     ArrayList<Post> list = new ArrayList<>();
     ArrayList<Post> listNews = new ArrayList<>();
@@ -83,6 +86,7 @@ public class ListActivity extends AppCompatActivity {
     ArrayList<Post> listis = new ArrayList<>();
     ArrayList<Post> listpc = new ArrayList<>();
     ArrayList<Post> listwh = new ArrayList<>();
+    ArrayList<Post> listtip = new ArrayList<>();
     ArrayList<Post> listMainten = new ArrayList<>();
     RecyclerView recList;
 
@@ -162,6 +166,27 @@ public class ListActivity extends AppCompatActivity {
 
             }
             ApiBus.getInstance().postQueue(new EnningRequestedEvent("dd"));
+        }
+
+        if (cat.equals("5")) {
+            Log.e("cat", cat);
+            if (toolbar != null) {
+                setSupportActionBar(toolbar);
+                getSupportActionBar().setTitle("Tip");
+                toolbar.setTitleTextColor(Color.BLACK);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setDisplayShowHomeEnabled(true);
+                getSupportActionBar().setHomeButtonEnabled(true);
+
+                toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                });
+
+            }
+            ApiBus.getInstance().postQueue(new TipRequestedEvent("dd"));
         }
 
         if (cat.equals("4")) {
@@ -721,6 +746,35 @@ public class ListActivity extends AppCompatActivity {
         }
 
     }
+
+
+
+    @Subscribe
+    public void GetTip(final TipReceivedEvent event) {
+        if (event != null) {
+            progressBar3.setVisibility(View.GONE);
+            for (int i = 0; i < event.getPost().getPost().size(); i++) {
+                listtip.add(event.getPost());
+                tipRecyclerAdapter = new ListCourseRecyclerAdapter(getApplicationContext(), listtip);
+                recList.setAdapter(tipRecyclerAdapter);
+            }
+
+            tipRecyclerAdapter.SetOnItemVideiosClickListener(new ListCourseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    String link = listtip.get(position).getPost().get(position).getLink();
+                    Log.e("bbbb", link);
+                    Intent i = new Intent(getApplicationContext(), ListWebViewActivity.class);
+                    i.putExtra("link", link);
+                    startActivity(i);
+                }
+            });
+
+        }
+
+
+    }
+
 
     @Override
     protected void onDestroy() {

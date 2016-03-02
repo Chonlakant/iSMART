@@ -52,31 +52,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import ismart.is.com.ismart.activity.AboutWebViewActivity;
-import ismart.is.com.ismart.activity.AllCourseActivity;
 import ismart.is.com.ismart.activity.ChatRoomActivity;
 import ismart.is.com.ismart.activity.ListActivity;
-import ismart.is.com.ismart.activity.ListWebViewActivity;
 import ismart.is.com.ismart.activity.LoginActivity;
-import ismart.is.com.ismart.activity.MyCourseActivity;
-import ismart.is.com.ismart.activity.MainActivityTap;
-import ismart.is.com.ismart.activity.PhotoActivity;
 import ismart.is.com.ismart.activity.PhotoActivityMian;
-import ismart.is.com.ismart.activity.SettingActivity;
 import ismart.is.com.ismart.activity.TrainCourseActivity;
-import ismart.is.com.ismart.adapter.ListCourseRecyclerAdapter;
 import ismart.is.com.ismart.adapter.MyRecyclerAdapter;
-import ismart.is.com.ismart.adapter.TransformerAdapter;
 import ismart.is.com.ismart.app.Config;
 import ismart.is.com.ismart.app.EndPoints;
 import ismart.is.com.ismart.event.ActivityResultBus;
 import ismart.is.com.ismart.event.ApiBus;
 import ismart.is.com.ismart.event.FeedReceivedEvent;
 import ismart.is.com.ismart.event.FeedRequestedEvent;
-import ismart.is.com.ismart.event.NewsRequestedEvent;
 import ismart.is.com.ismart.event.PhotoReceivedEvent;
 import ismart.is.com.ismart.event.PhotoRequestedEvent;
-import ismart.is.com.ismart.event.ProductionReceivedEvent;
-import ismart.is.com.ismart.event.SaleRequestedEvent;
 import ismart.is.com.ismart.gcm.GcmIntentService;
 import ismart.is.com.ismart.gcm.NotificationUtils;
 import ismart.is.com.ismart.model.ChatRoom;
@@ -242,6 +231,18 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
                         drawerLayout.closeDrawers();
                         break;
 
+
+                    case R.id.my_tip:
+//                        Intent intent1 = new Intent(getApplicationContext(), MyCourseActivity.class);
+//                        startActivity(intent1);
+                        Intent my_tip = new Intent(getApplicationContext(), ListActivity.class);
+                        my_tip.putExtra("cat", "5");
+                        startActivity(my_tip);
+                        drawerLayout.closeDrawers();
+                        break;
+
+
+
                     case R.id.enterprise:
 //                        Intent intent1 = new Intent(getApplicationContext(), MyCourseActivity.class);
 //                        startActivity(intent1);
@@ -258,21 +259,19 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
                         startActivity(intent5);
                         drawerLayout.closeDrawers();
                         break;
-
-
                     case R.id.abount:
                         Intent intent2 = new Intent(getApplicationContext(), AboutWebViewActivity.class);
                         intent2.putExtra("link", "http://mn-community.com/community_service/about_us.php");
                         startActivity(intent2);
                         drawerLayout.closeDrawers();
                         break;
-                    case R.id.call:
-                        Intent intent = new Intent(getApplicationContext(), ChatRoomActivity.class);
-                        intent.putExtra("chat_room_id", "8");
-                        intent.putExtra("name", "Realtime Chat App");
-                        startActivity(intent);
-                        drawerLayout.closeDrawers();
-                        break;
+//                    case R.id.call:
+//                        Intent intent = new Intent(getApplicationContext(), ChatRoomActivity.class);
+//                        intent.putExtra("chat_room_id", "8");
+//                        intent.putExtra("name", "Realtime Chat App");
+//                        startActivity(intent);
+//                        drawerLayout.closeDrawers();
+//                        break;
 
 //                    case R.id.setting:
 //
@@ -549,9 +548,9 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
             title3 = event.getPost().getPost().get(2).getTitle();
 
                 HashMap<String, String> url_maps = new HashMap<String, String>();
-                url_maps.put(title1, photo1);
-                url_maps.put(title2, photo2);
-                url_maps.put(title3, photo3);
+                url_maps.put("รูปที่ 1", "http://ipro-training.com/images/pro1.jpg");
+                url_maps.put("รูปที่ 2", "http://ipro-training.com/images/pro2.jpg");
+                url_maps.put("รูปที่ 3", "http://ipro-training.com/images/pro3.jpg");
 
 
                 for (String name : url_maps.keySet()) {

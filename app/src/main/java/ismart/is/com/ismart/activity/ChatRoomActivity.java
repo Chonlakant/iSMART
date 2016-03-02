@@ -45,6 +45,8 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -511,10 +513,15 @@ public class ChatRoomActivity extends AppCompatActivity {
 //        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
 //        photoPickerIntent.setType("image/*");
 //        startActivityForResult(photoPickerIntent, REQUEST_GALLERY);
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        // Start the Intent
-        startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
+
+//        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+//                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//        // Start the Intent
+//        startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivityForResult(intent, RESULT_LOAD_IMG);
+
     }
 
     public void pickCamera() {
@@ -536,8 +543,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         Bitmap bitmap;
         if (requestCode == 100 && resultCode == RESULT_OK) {
 
-            File f = new File(Environment.getExternalStorageDirectory()
-                    .toString());
+            File f = new File(Environment.getExternalStorageDirectory().toString());
             for (File temp : f.listFiles()) {
                 if (temp.getName().equals("temp.jpg")) {
                     f = temp;
@@ -602,27 +608,48 @@ public class ChatRoomActivity extends AppCompatActivity {
 
 
         }
-        if (requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK
-                && null != data) {
-            // Get the Image from data
 
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-            // Get the cursor
-            Cursor cursor = getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
-            // Move to first row
-            cursor.moveToFirst();
-
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            picturePath = cursor.getString(columnIndex);
-            cursor.close();
-//            mImageView.setVisibility(View.VISIBLE);
-//            mImageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-            bm = BitmapFactory.decodeFile(picturePath);
-            sendMessagePhoto();
+        if (requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK) {
+            if (data == null) {
+                //Display an error
+                return;
+            }
+            try {
+                InputStream inputStream = getApplicationContext().getContentResolver().openInputStream(data.getData());
+                Log.e("qqqqqqo",inputStream.toString());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            //Now you can do whatever you want with your inpustream, save it as file, upload to a server, decode a bitmap...
         }
+//        if (requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK
+//                && null != data) {
+//            // Get the Image from data
+//
+//
+//
+//
+//            Uri selectedImage = data.getData();
+//            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+//
+//            // Get the cursor
+//            Cursor cursor = getContentResolver().query(selectedImage,
+//                    filePathColumn, null, null, null);
+//            // Move to first row
+//            cursor.moveToFirst();
+//
+//            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//            picturePath = cursor.getString(columnIndex);
+//            cursor.close();
+////            mImageView.setVisibility(View.VISIBLE);
+////            mImageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+//            bm = BitmapFactory.decodeFile(picturePath);
+//            sendMessagePhoto();
+//
+//
+//
+//
+//        }
     }
 
     @Override

@@ -16,7 +16,12 @@
         <item
             android:id="@+id/my_course"
             android:icon="@drawable/training"
-            android:title="Training / Seminar" />
+            android:title="Training / Saveing" />
+
+        <item
+            android:id="@+id/my_tip"
+            android:icon="@drawable/info"
+            android:title="Tip" />
         <item
             android:id="@+id/enterprise"
             android:icon="@drawable/us"
@@ -28,10 +33,10 @@
             android:icon="@drawable/book"
             android:title="Success Story" />
 
-        <item
-            android:id="@+id/call"
-            android:icon="@drawable/phone"
-            android:title="การติดต่อเรา" />
+        <!--<item-->
+            <!--android:id="@+id/call"-->
+            <!--android:icon="@drawable/phone"-->
+            <!--android:title="การติดต่อเรา" />-->
 
         <item
             android:id="@+id/abount"

@@ -64,7 +64,7 @@ public class ListLayer1Activity extends AppCompatActivity {
 
         if (toolbar != null) {
             setSupportActionBar(toolbar);
-            getSupportActionBar().setTitle("All Course");
+            getSupportActionBar().setTitle("Article");
             toolbar.setTitleTextColor(Color.BLACK);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);

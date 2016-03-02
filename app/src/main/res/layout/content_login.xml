@@ -49,6 +49,7 @@
             <EditText
                 android:background="@drawable/btn"
                 android:id="@+id/input_pass"
+                android:inputType="textPassword"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:hint="@string/hint_email" />

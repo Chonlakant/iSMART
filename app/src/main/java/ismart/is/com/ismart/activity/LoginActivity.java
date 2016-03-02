@@ -137,10 +137,12 @@ public class LoginActivity extends AppCompatActivity {
         Log.e("password", password);
         loadingDialog.show();
         if (TextUtils.isEmpty(email)) {
+            loadingDialog.dismiss();
             Toast.makeText(getApplicationContext(), "กรุณาใส่อีเมล์", Toast.LENGTH_SHORT).show();
             return;
         }
         if (TextUtils.isEmpty(password)) {
+            loadingDialog.dismiss();
             Toast.makeText(getApplicationContext(), "กรุณาใส่พาสเวิร์ด", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -167,12 +169,12 @@ public class LoginActivity extends AppCompatActivity {
         String id = json.getString("chat_id");
         Log.e("ddd", id);
         if (success == 0) {
-            Toast.makeText(getApplicationContext(), "กรอก pass หรือ Password ผิด", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "กรอก Email หรือ Password ผิด", Toast.LENGTH_SHORT).show();
             loadingDialog.dismiss();
         }
         if (success == 1) {
             loadingDialog.dismiss();
-            Toast.makeText(getApplicationContext(), "เข้าสู่รับบสำเร็จ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "เข้าสู่ระบบสำเร็จ", Toast.LENGTH_SHORT).show();
             Intent intentMain = new Intent(getApplicationContext().getApplicationContext(), MainActivity.class);
             startActivity(intentMain);
             finish();
