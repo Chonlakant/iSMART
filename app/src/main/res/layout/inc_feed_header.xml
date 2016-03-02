@@ -26,7 +26,7 @@
             android:id="@+id/profile_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="iSMART"
+            android:text="is"
             android:textColor="#000000"
             android:textSize="@dimen/text_size"
             android:textStyle="bold" />
@@ -38,7 +38,7 @@
             android:gravity="center"
             android:text="11 days ago"
             android:textAppearance="?android:attr/textAppearanceLarge"
-
+            android:visibility="gone"
             android:textColor="#9497A3"
             android:textSize="10sp" />
     </LinearLayout>

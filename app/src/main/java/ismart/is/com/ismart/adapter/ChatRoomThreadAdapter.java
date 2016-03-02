@@ -19,6 +19,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import ismart.is.com.ismart.Constant;
+import ismart.is.com.ismart.OnLoadMoreListener;
 import ismart.is.com.ismart.R;
 import ismart.is.com.ismart.model.Message;
 
@@ -32,7 +33,7 @@ public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private OnItemClickListener mItemClickListener;
     private Context mContext;
     private ArrayList<Message> messageArrayList;
-
+    private OnLoadMoreListener onLoadMoreListener;
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView message, timestamp;
         ImageView image_content;

@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxStatus;
@@ -31,7 +32,7 @@ import ismart.is.com.ismart.event.ArticlesRequestedEvent;
 import ismart.is.com.ismart.model.Post;
 
 public class ListLayer1Activity extends AppCompatActivity {
-
+    ProgressBar progressBar3;
     private Toolbar toolbar;
     ListRecyclerAdapter myCourseRecyclerAdapter;
 
@@ -53,6 +54,8 @@ public class ListLayer1Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        progressBar3 = (ProgressBar) findViewById(R.id.progressBar3);
+        progressBar3.setVisibility(View.VISIBLE);
         cat = getIntent().getStringExtra("cat");
         aq = new AQuery(this);
 
@@ -113,6 +116,7 @@ public class ListLayer1Activity extends AppCompatActivity {
                     list.add(item);
                 }
                 myCourseRecyclerAdapter.notifyDataSetChanged();
+                progressBar3.setVisibility(View.GONE);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

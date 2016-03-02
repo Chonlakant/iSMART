@@ -33,6 +33,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.androidquery.AQuery;
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -40,6 +41,7 @@ import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -49,30 +51,45 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import ismart.is.com.ismart.activity.AboutWebViewActivity;
 import ismart.is.com.ismart.activity.AllCourseActivity;
 import ismart.is.com.ismart.activity.ChatRoomActivity;
 import ismart.is.com.ismart.activity.ListActivity;
+import ismart.is.com.ismart.activity.ListWebViewActivity;
 import ismart.is.com.ismart.activity.LoginActivity;
 import ismart.is.com.ismart.activity.MyCourseActivity;
 import ismart.is.com.ismart.activity.MainActivityTap;
+import ismart.is.com.ismart.activity.PhotoActivity;
+import ismart.is.com.ismart.activity.PhotoActivityMian;
 import ismart.is.com.ismart.activity.SettingActivity;
+import ismart.is.com.ismart.activity.TrainCourseActivity;
+import ismart.is.com.ismart.adapter.ListCourseRecyclerAdapter;
 import ismart.is.com.ismart.adapter.MyRecyclerAdapter;
 import ismart.is.com.ismart.adapter.TransformerAdapter;
 import ismart.is.com.ismart.app.Config;
 import ismart.is.com.ismart.app.EndPoints;
+import ismart.is.com.ismart.event.ActivityResultBus;
 import ismart.is.com.ismart.event.ApiBus;
+import ismart.is.com.ismart.event.FeedReceivedEvent;
+import ismart.is.com.ismart.event.FeedRequestedEvent;
+import ismart.is.com.ismart.event.NewsRequestedEvent;
+import ismart.is.com.ismart.event.PhotoReceivedEvent;
+import ismart.is.com.ismart.event.PhotoRequestedEvent;
+import ismart.is.com.ismart.event.ProductionReceivedEvent;
 import ismart.is.com.ismart.event.SaleRequestedEvent;
 import ismart.is.com.ismart.gcm.GcmIntentService;
 import ismart.is.com.ismart.gcm.NotificationUtils;
 import ismart.is.com.ismart.model.ChatRoom;
 import ismart.is.com.ismart.model.Message;
+import ismart.is.com.ismart.model.Post;
+import ismart.is.com.ismart.model.User;
 
 public class MainActivity extends AppCompatActivity implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
 
-
+    AlertDialogManager alert = new AlertDialogManager();
+    ConnectionDetector cd;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
-    private SwipeRefreshLayout swipeContainer;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
@@ -81,10 +98,17 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
     private ArrayList<ChatRoom> chatRoomArrayList;
     MyRecyclerAdapter myRecyclerAdapter;
     private SliderLayout mDemoSlider;
-    String[] title = {"สิ่งที่วิศวกรซ่อมบำรุงมืออาชีพ ควรรู้ (4วัน)", "การวางแผนการผลิตในภาพรวมและตารางการวางแผนการผลิตหลัก", "ระบบบำรุงรักษาอัตโนมัติและต่อเนื่อง", "การวิเคราห์มูลค่า (VA)"};
-    String[] imagUrl = {"http://blog.wonderme.co/wp-content/uploads/2014/04/006-1.jpg", "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRqz7aVQ7t2A50fdbNu_aBqcXJ7V-ZqM9zMj-94WnYvKeniXak7"
-            , "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTe6oap23BTWlnhXyGsKqFpySh11ORy3T53PCJeymrDLkY23tg", "http://blog.wonderme.co/wp-content/uploads/2014/04/006-1.jpg"};
+    ArrayList<Post> list = new ArrayList<>();
     private String TAG = MainActivity.class.getSimpleName();
+    RecyclerView recList;
+
+    String photo1 ;
+    String photo2 ;
+    String photo3 ;
+
+    String title1 ;
+    String title2 ;
+    String title3 ;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -97,17 +121,39 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         progressBar2 = (ProgressBar) findViewById(R.id.progressBar2);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         content_frame = (RelativeLayout) findViewById(R.id.content_frame);
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         mDemoSlider = (SliderLayout) findViewById(R.id.slider);
+        progressBar2.setVisibility(View.VISIBLE);
+        ApiBus.getInstance().postQueue(new FeedRequestedEvent());
+        ApiBus.getInstance().postQueue(new PhotoRequestedEvent());
 
-        if (IsmartApp.getInstance().getPrefManager().getUser() == null) {
+        String selfUserId = IsmartApp.getInstance().getPrefManager().getUser().getId();
+       // String selfUserId =  IsmartApp.getInstance().getPrefManagerPaty().id().getOr("");
+        if(selfUserId != null){
+
+        }
+        Log.e("ssss",selfUserId);
+        cd = new ConnectionDetector(getApplicationContext());
+        // Check if Internet present
+        if (!cd.isConnectingToInternet()) {
+            // Internet Connection is not present
+            alert.showAlertDialog(MainActivity.this, "Internet Connection Error", "Please connect to working Internet connection", false);
+            // stop executing code by return
+            return;
+        }
+        if (IsmartApp.getInstance().getPrefManagerPaty().userName().getOr("") == null) {
             launchLoginActivity();
         }
+
+        String email = IsmartApp.getInstance().getPrefManagerPaty().email().getOr("");
+        String name = IsmartApp.getInstance().getPrefManagerPaty().userName().getOr("");
+        User user = new User(selfUserId, name, email);
+        IsmartApp.getInstance().getPrefManager().storeUser(user);
+
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -129,27 +175,19 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
             }
         };
 
-        HashMap<String, String> url_maps = new HashMap<String, String>();
-        url_maps.put("สิ่งที่วิศวกรซ่อมบำรุงมืออาชีพ ควรรู้ (4วัน)", "http://blog.wonderme.co/wp-content/uploads/2014/04/006-1.jpg");
-        url_maps.put("การวางแผนการผลิตในภาพรวมและตารางการวางแผนการผลิตหลัก", "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRqz7aVQ7t2A50fdbNu_aBqcXJ7V-ZqM9zMj-94WnYvKeniXak7");
-        url_maps.put("การวิเคราห์มูลค่า (VA)", "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTe6oap23BTWlnhXyGsKqFpySh11ORy3T53PCJeymrDLkY23tg");
-        url_maps.put("ระบบบำรุงรักษาอัตโนมัติและต่อเนื่อง", "http://blog.wonderme.co/wp-content/uploads/2014/04/006-1.jpg");
-
 
         setupViews();
-        RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
+        recList = (RecyclerView) findViewById(R.id.cardList);
         recList.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
         chatRoomArrayList = new ArrayList<>();
-        myRecyclerAdapter = new MyRecyclerAdapter(getApplicationContext(), title, imagUrl);
-        recList.setAdapter(myRecyclerAdapter);
 
 
         if (toolbar != null) {
             setSupportActionBar(toolbar);
-            getSupportActionBar().setTitle("iSMART");
+            getSupportActionBar().setTitle("Maintenance Community");
             toolbar.setTitleTextColor(Color.BLACK);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -166,35 +204,8 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
 
             drawerToggle.syncState();
         }
-        // Configure the refreshing colors
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
-
-        for (String name : url_maps.keySet()) {
-            TextSliderView textSliderView = new TextSliderView(this);
-            // initialize a SliderLayout
-            Log.e("aaaaa", url_maps.get(name));
-            textSliderView
-                    .description(name)
-                    .image(url_maps.get(name))
-                    .setScaleType(BaseSliderView.ScaleType.Fit)
-                    .setOnSliderClickListener(this);
-
-            //add your extra information
-            textSliderView.bundle(new Bundle());
-            textSliderView.getBundle()
-                    .putString("extra", name);
 
 
-            mDemoSlider.addSlider(textSliderView);
-        }
-        mDemoSlider.setPresetTransformer(SliderLayout.Transformer.DepthPage);
-        mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-        mDemoSlider.setCustomAnimation(new DescriptionAnimation());
-        mDemoSlider.setDuration(10000);
-        mDemoSlider.addOnPageChangeListener(this);
         if (checkPlayServices()) {
             registerGCM();
             fetchChatRooms();
@@ -222,11 +233,12 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.my_course:
-//                        Intent intent1 = new Intent(getApplicationContext(), MyCourseActivity.class);
-//                        startActivity(intent1);
-                        Intent i = new Intent(getApplicationContext(), AllCourseActivity.class);
+                        Intent i = new Intent(getApplicationContext(), TrainCourseActivity.class);
                         i.putExtra("cat", "2");
                         startActivity(i);
+//                        Intent i = new Intent(getApplicationContext(), AllCourseActivity.class);
+//                        i.putExtra("cat", "2");
+//                        startActivity(i);
                         drawerLayout.closeDrawers();
                         break;
 
@@ -248,11 +260,12 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
                         break;
 
 
-//                    case R.id.profile:
-//                        Intent intent2 = new Intent(getApplicationContext(), SettingActivity.class);
-//                        startActivity(intent2);
-//                        drawerLayout.closeDrawers();
-//                        break;
+                    case R.id.abount:
+                        Intent intent2 = new Intent(getApplicationContext(), AboutWebViewActivity.class);
+                        intent2.putExtra("link", "http://mn-community.com/community_service/about_us.php");
+                        startActivity(intent2);
+                        drawerLayout.closeDrawers();
+                        break;
                     case R.id.call:
                         Intent intent = new Intent(getApplicationContext(), ChatRoomActivity.class);
                         intent.putExtra("chat_room_id", "8");
@@ -261,9 +274,18 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
                         drawerLayout.closeDrawers();
                         break;
 
+//                    case R.id.setting:
+//
+//                        drawerLayout.closeDrawers();
+//                        break;
+
 
                     case R.id.logout:
-                        IsmartApp.getInstance().logout(getApplicationContext());
+//                        IsmartApp.getInstance().logout(getApplicationContext());
+                        IsmartApp.getInstance().getPrefManagerPaty().clear();
+                        IsmartApp.getInstance().getPrefManagerPaty().commit();
+                        Intent intenLogout = new Intent(getApplicationContext(),LoginActivity.class);
+                        startActivity(intenLogout);
                         drawerLayout.closeDrawers();
                         break;
 
@@ -398,8 +420,8 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
             @Override
             public void onErrorResponse(VolleyError error) {
                 NetworkResponse networkResponse = error.networkResponse;
-                Log.e(TAG, "Volley error: " + error.getMessage() + ", code: " + networkResponse);
-                Toast.makeText(getApplicationContext(), "Volley error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                //Log.e(TAG, "Volley error: " + error.getMessage() + ", code: " + networkResponse);
+                // Toast.makeText(getApplicationContext(), "Volley error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -438,7 +460,8 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
     @Override
     protected void onResume() {
         super.onResume();
-
+        ActivityResultBus.getInstance().register(this);
+        ApiBus.getInstance().register(this);
         // register GCM registration complete receiver
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(Config.REGISTRATION_COMPLETE));
@@ -456,6 +479,8 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
         super.onPause();
+        ActivityResultBus.getInstance().unregister(this);
+        ApiBus.getInstance().unregister(this);
     }
 
     // starting the service to register with GCM
@@ -480,5 +505,84 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
             return false;
         }
         return true;
+    }
+
+    @Subscribe
+    public void GetFeed(final FeedReceivedEvent event) {
+        if (event != null) {
+            progressBar2.setVisibility(View.GONE);
+            list.add(event.getPost());
+            for (int i = 0; i < event.getPost().getPost().size(); i++) {
+                Log.e("sssss", event.getPost().getPost().get(i).getFile_img());
+            }
+
+            myRecyclerAdapter = new MyRecyclerAdapter(getApplicationContext(), list);
+            recList.setAdapter(myRecyclerAdapter);
+
+            myRecyclerAdapter.SetOnItemClickListener(new MyRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    String urlPhoto = list.get(position).getPost().get(position).getFile_img();
+                    Log.e("urlPhoto", urlPhoto);
+                    Intent intent = new Intent(getApplicationContext(), PhotoActivityMian.class);
+                    intent.putExtra("photos", urlPhoto);
+                    startActivity(intent);
+                }
+            });
+        }
+
+    }
+
+    @Subscribe
+    public void GetPhoto(final PhotoReceivedEvent event) {
+        if (event != null) {
+            photo1 = event.getPost().getPost().get(0).getFile_img();
+            photo2 = event.getPost().getPost().get(1).getFile_img();
+            photo3 = event.getPost().getPost().get(2).getFile_img();
+
+            Log.e("photo1",photo1);
+            Log.e("photo2",photo2);
+            Log.e("photo3",photo3);
+
+            title1 = event.getPost().getPost().get(0).getTitle();
+            title2 = event.getPost().getPost().get(1).getTitle();
+            title3 = event.getPost().getPost().get(2).getTitle();
+
+                HashMap<String, String> url_maps = new HashMap<String, String>();
+                url_maps.put(title1, photo1);
+                url_maps.put(title2, photo2);
+                url_maps.put(title3, photo3);
+
+
+                for (String name : url_maps.keySet()) {
+                    TextSliderView textSliderView = new TextSliderView(this);
+                    // initialize a SliderLayout
+
+                    textSliderView
+                            .description(name)
+                            .image(url_maps.get(name))
+                            .setScaleType(BaseSliderView.ScaleType.Fit)
+                            .setOnSliderClickListener(this);
+
+                    //add your extra information
+                    textSliderView.bundle(new Bundle());
+                    textSliderView.getBundle()
+                            .putString("extra", name);
+
+
+                    mDemoSlider.addSlider(textSliderView);
+                }
+                mDemoSlider.setPresetTransformer(SliderLayout.Transformer.DepthPage);
+                mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+                mDemoSlider.setCustomAnimation(new DescriptionAnimation());
+                mDemoSlider.setDuration(10000);
+                mDemoSlider.addOnPageChangeListener(this);
+
+
+
+
+
+        }
+
     }
 }

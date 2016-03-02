@@ -5,5 +5,5 @@ package ismart.is.com.ismart;
  */
 public class Constant {
 
-    public static final String enPointh = "http://192.168.1.102:8080/gcm_chat/v1/uploads/";
+    public static final String enPointh = "http://mn-community.com/gcm_chat/v1/uploads/";
 }

@@ -1,6 +1,7 @@
 package ismart.is.com.ismart.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,19 +57,20 @@ public class ListRecyclerAdapter extends RecyclerView.Adapter<ListRecyclerAdapte
 
         ImageView image_logo;
         TextView title_tv;
-
+        CardView card_view;
         public ContactViewHolder(View v) {
             super(v);
             image_logo = (ImageView) v.findViewById(R.id.image_logo);
             title_tv = (TextView) v.findViewById(R.id.title_tv);
+            card_view = (CardView) v.findViewById(R.id.card_view);
             v.setOnClickListener(this);
-            image_logo.setOnClickListener(this);
+            card_view.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.image_logo:
+                case R.id.card_view:
                     if (mItemClickListener != null) {
                         mItemClickListener.onItemClick(v, getPosition());
                     }

@@ -51,6 +51,7 @@ import java.util.Map;
 
 import ismart.is.com.ismart.Base64;
 import ismart.is.com.ismart.IsmartApp;
+import ismart.is.com.ismart.PrefManager;
 import ismart.is.com.ismart.R;
 import ismart.is.com.ismart.adapter.ChatRoomThreadAdapter;
 import ismart.is.com.ismart.app.Config;
@@ -73,7 +74,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     private EditText inputMessage;
     private Button btnSend;
     private static int RESULT_LOAD_IMG = 1;
-
+    PrefManager pref;
     String ba1 = "";
     Bitmap bm;
     String picturePath;
@@ -90,6 +91,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         chatRoomId = intent.getStringExtra("chat_room_id");
+        pref = IsmartApp.getPrefManagerPaty();
         // String title = intent.getStringExtra("name");
         String title = "Chat";
         getSupportActionBar().setTitle(title);
@@ -106,7 +108,9 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         // self user id is to identify the message owner
         String selfUserId = IsmartApp.getInstance().getPrefManager().getUser().getId();
-
+        //String selfUserId =  IsmartApp.getInstance().getPrefManagerPaty().id().getOr("");
+        //String selfUserId = pref.id().getOr("nono");
+        Log.e("dddd",selfUserId);
         mAdapter = new ChatRoomThreadAdapter(this, messageArrayList, selfUserId);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);

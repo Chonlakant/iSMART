@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">Mian</string>
+    <string name="app_name">Maintenance Community</string>
     <string name="drawer_open">open drawer</string>
     <string name="drawer_close">close drawer</string>
 
-    <string name="hint_name">Full Name</string>
-    <string name="hint_email">Email</string>
+    <string name="hint_name">Email</string>
+    <string name="hint_email">Password</string>
     <string name="err_msg_name">Enter full name</string>
     <string name="err_msg_email">Enter valid email address</string>
     <string name="title_activity_chat_room_discussion">ChatRoomDiscussionActivity</string>

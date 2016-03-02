@@ -1,6 +1,7 @@
 package ismart.is.com.ismart.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,8 @@ public class AllCourseRecyclerAdapter extends RecyclerView.Adapter<AllCourseRecy
     public void onBindViewHolder(ContactViewHolder contactViewHolder, int i) {
         Post item = list.get(i);
         contactViewHolder.title_tv.setText(item.getPost().get(i).getTitle());
+        contactViewHolder.title_count.setText(item.getPost().get(i).getCount());
+
 //        Picasso.with(context)
 //                .load(item.getPost().get(i).getFile_img())
 //                .fit().centerCrop()
@@ -55,20 +58,23 @@ public class AllCourseRecyclerAdapter extends RecyclerView.Adapter<AllCourseRecy
     public static class ContactViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView image_logo;
-        TextView title_tv;
+        TextView title_tv,title_count;
+          CardView card_view;
 
         public ContactViewHolder(View v) {
             super(v);
             image_logo = (ImageView) v.findViewById(R.id.image_logo);
             title_tv = (TextView) v.findViewById(R.id.title_tv);
+            title_count = (TextView) v.findViewById(R.id.title_count);
+            card_view = (CardView) v.findViewById(R.id.card_view);
             v.setOnClickListener(this);
-            image_logo.setOnClickListener(this);
+            card_view.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.image_logo:
+                case R.id.card_view:
                     if (mItemClickListener != null) {
                         mItemClickListener.onItemClick(v, getPosition());
                     }

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#fff"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -17,36 +18,82 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+
+        <ImageView
+            android:src="@drawable/mn"
+            android:layout_width="200dp"
+            android:layout_height="90dp"
+            android:layout_gravity="center_horizontal" />
+
         <android.support.design.widget.TextInputLayout
+            android:layout_marginTop="5dp"
             android:id="@+id/input_layout_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/input_name"
+                android:background="@drawable/btn"
+                android:id="@+id/input_email"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:hint="@string/hint_name" />
 
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
+            android:layout_marginTop="10dp"
             android:id="@+id/input_layout_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/input_email"
+                android:background="@drawable/btn"
+                android:id="@+id/input_pass"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:hint="@string/hint_email" />
 
         </android.support.design.widget.TextInputLayout>
 
-        <Button android:id="@+id/btn_enter"
+        <Button
+            android:layout_marginTop="10dp"
+            android:id="@+id/btn_enter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Enter" />
+            android:text="LOGIN" />
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txt_register"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Register Now"
+                android:textColor="#9f021d"
+                android:textSize="15dp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/textView13"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ลืม Password"
+                    android:textSize="15dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:layout_gravity="right" />
+            </LinearLayout>
+
+        </LinearLayout>
+
 
     </LinearLayout>
 
@@ -59,7 +106,7 @@
         android:layout_gravity="center"
         android:layout_marginBottom="10dp"
         android:indeterminateTint="@color/colorAccent"
-        android:visibility="gone"
-        android:indeterminateTintMode="src_atop" />
+        android:indeterminateTintMode="src_atop"
+        android:visibility="gone" />
 
 </RelativeLayout>

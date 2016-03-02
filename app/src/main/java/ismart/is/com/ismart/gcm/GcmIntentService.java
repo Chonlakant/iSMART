@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ismart.is.com.ismart.IsmartApp;
+import ismart.is.com.ismart.PrefManager;
 import ismart.is.com.ismart.R;
 import ismart.is.com.ismart.app.Config;
 import ismart.is.com.ismart.app.EndPoints;
@@ -32,7 +33,7 @@ import ismart.is.com.ismart.model.User;
 
 
 public class GcmIntentService extends IntentService {
-
+    PrefManager pref;
     private static final String TAG = GcmIntentService.class.getSimpleName();
 
     public GcmIntentService() {
@@ -68,14 +69,15 @@ public class GcmIntentService extends IntentService {
      */
     private void registerGCM() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
+        pref = IsmartApp.getPrefManagerPaty();
         try {
             InstanceID instanceID = InstanceID.getInstance(this);
             String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
 
             Log.e(TAG, "GCM Registration Token: " + token);
-
+            pref.token().put(token);
+            pref.commit();
             // sending the registration id to our server
             sendRegistrationToServer(token);
 
@@ -134,7 +136,7 @@ public class GcmIntentService extends IntentService {
             public void onErrorResponse(VolleyError error) {
                 NetworkResponse networkResponse = error.networkResponse;
                 Log.e(TAG, "Volley error: " + error.getMessage() + ", code: " + networkResponse);
-                Toast.makeText(getApplicationContext(), "Volley error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getApplicationContext(), "Volley error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }) {
 

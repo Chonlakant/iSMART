@@ -1,11 +1,7 @@
 package ismart.is.com.ismart.activity;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -13,19 +9,11 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
-import com.squareup.otto.Subscribe;
-
-import java.util.ArrayList;
-
 import ismart.is.com.ismart.R;
-import ismart.is.com.ismart.adapter.ListCourseRecyclerAdapter;
 import ismart.is.com.ismart.event.ActivityResultBus;
 import ismart.is.com.ismart.event.ApiBus;
-import ismart.is.com.ismart.event.ArticlesReceivedEvent;
-import ismart.is.com.ismart.event.ArticlesRequestedEvent;
-import ismart.is.com.ismart.model.Post;
 
-public class ListWebViewActivity extends AppCompatActivity {
+public class AboutWebViewActivity extends AppCompatActivity {
     ProgressBar progressBar5;
     WebView webview;
     String link;

@@ -31,11 +31,11 @@ import retrofit.RestAdapter;
  * Created by madhur on 3/1/15.
  */
 public class IsmartApp extends Application implements Application.ActivityLifecycleCallbacks {
-
+    private static PrefManager prefManager;
     public static final String TAG = IsmartApp.class
             .getSimpleName();
     private RequestQueue mRequestQueue;
-    public static final String API_ENDPOINT = "http://192.168.1.141";
+    public static final String API_ENDPOINT = "http://mn-community.com";
 
     public static Activity currentActivity;
     private MyPreferenceManager pref;
@@ -55,7 +55,7 @@ public class IsmartApp extends Application implements Application.ActivityLifecy
         sContext = this;
         Instance = this;
         applicationHandler = new Handler(getInstance().getMainLooper());
-
+        prefManager = new PrefManager(getSharedPreferences("App", MODE_PRIVATE));
         saveInstallation(0);
 
 
@@ -198,5 +198,7 @@ public class IsmartApp extends Application implements Application.ActivityLifecy
     public void onActivityDestroyed(Activity activity) {
         Log.e("VMVMVM", "onActivityDestroyed ");
     }
-
+    public static PrefManager getPrefManagerPaty() {
+        return prefManager;
+    }
 }

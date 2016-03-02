@@ -10,6 +10,8 @@ import ismart.is.com.ismart.event.ArticlesReceivedEvent;
 import ismart.is.com.ismart.event.ArticlesRequestedEvent;
 import ismart.is.com.ismart.event.EnnigyReceivedEvent;
 import ismart.is.com.ismart.event.EnningRequestedEvent;
+import ismart.is.com.ismart.event.FeedReceivedEvent;
+import ismart.is.com.ismart.event.FeedRequestedEvent;
 import ismart.is.com.ismart.event.IsoReceivedEvent;
 import ismart.is.com.ismart.event.IsoRequestedEvent;
 import ismart.is.com.ismart.event.LogisticsReceivedEvent;
@@ -20,6 +22,8 @@ import ismart.is.com.ismart.event.ManagemantReceivedEvent;
 import ismart.is.com.ismart.event.ManagementRequestedEvent;
 import ismart.is.com.ismart.event.NewsReceivedEvent;
 import ismart.is.com.ismart.event.NewsRequestedEvent;
+import ismart.is.com.ismart.event.PhotoReceivedEvent;
+import ismart.is.com.ismart.event.PhotoRequestedEvent;
 import ismart.is.com.ismart.event.ProductionReceivedEvent;
 import ismart.is.com.ismart.event.ProductionRequestedEvent;
 import ismart.is.com.ismart.event.PurchaseReceivedEvent;
@@ -128,8 +132,8 @@ public class ApiHandler {
 
             @Override
             public void failure(RetrofitError error) {
-                Log.e("error", error.getLocalizedMessage());
-                Log.e("error", error.getUrl());
+//                Log.e("error", error.getLocalizedMessage());
+//                Log.e("error", error.getUrl());
             }
         });
     }
@@ -152,8 +156,6 @@ public class ApiHandler {
 
             @Override
             public void failure(RetrofitError error) {
-                Log.e("error", error.getLocalizedMessage());
-                Log.e("error", error.getUrl());
             }
         });
     }
@@ -352,12 +354,69 @@ public class ApiHandler {
             }
         });
     }
+
     @Subscribe
     public void onSuccess(final SuccessRequestedEvent event) {
         api.getSuccess(event.getVendor(), new Callback<Post>() {
             @Override
             public void success(Post post, Response response) {
                 ApiBus.getInstance().postQueue(new SuccessReceivedEvent(post));
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+    @Subscribe
+    public void onTrain(final TraingRequestedEvent event) {
+        api.getTrain(new Callback<Post>() {
+            @Override
+            public void success(Post post, Response response) {
+
+                for (int i = 1; i < post.getPost().size(); i++) {
+                    ApiBus.getInstance().postQueue(new TraingReceivedEvent(post));
+                }
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+    @Subscribe
+    public void onFeed(final FeedRequestedEvent event) {
+        api.getFeed(new Callback<Post>() {
+            @Override
+            public void success(Post post, Response response) {
+
+                for (int i = 1; i < post.getPost().size(); i++) {
+                    ApiBus.getInstance().postQueue(new FeedReceivedEvent(post));
+                }
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+    @Subscribe
+    public void onPhoto(final PhotoRequestedEvent event) {
+        api.getPhoto(new Callback<Post>() {
+            @Override
+            public void success(Post post, Response response) {
+
+                for (int i = 1; i < post.getPost().size(); i++) {
+                    ApiBus.getInstance().postQueue(new PhotoReceivedEvent(post));
+                }
+
             }
 
             @Override
