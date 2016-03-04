@@ -1,4 +1,4 @@
-package ismart.is.com.ismart;
+package com.mncomunity1;
 
 import org.junit.Test;
 

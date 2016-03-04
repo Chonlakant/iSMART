@@ -5,32 +5,32 @@
 
         <item
             android:id="@+id/home"
-            android:icon="@drawable/feed"
+            android:icon="@drawable/circled"
             android:title="News" />
 
         <item
             android:id="@+id/course"
-            android:icon="@drawable/list"
+            android:icon="@drawable/circled"
             android:title="Articles" />
 
         <item
             android:id="@+id/my_course"
-            android:icon="@drawable/training"
-            android:title="Training / Saveing" />
+            android:icon="@drawable/circled"
+            android:title="Training / Seminar" />
 
         <item
             android:id="@+id/my_tip"
-            android:icon="@drawable/info"
-            android:title="Tip" />
+            android:icon="@drawable/circled"
+            android:title="Tips / Technique" />
         <item
             android:id="@+id/enterprise"
-            android:icon="@drawable/us"
-            android:title="Energy Saceing" />
+            android:icon="@drawable/circled"
+            android:title="Energy Saving" />
 
 
         <item
             android:id="@+id/success"
-            android:icon="@drawable/book"
+            android:icon="@drawable/circled"
             android:title="Success Story" />
 
         <!--<item-->
@@ -40,7 +40,7 @@
 
         <item
             android:id="@+id/abount"
-            android:icon="@drawable/about"
+            android:icon="@drawable/circled"
             android:title="เกี่ยวกับเรา" />
         <!--<item-->
             <!--android:id="@+id/setting"-->
@@ -48,7 +48,6 @@
             <!--android:title="ตั้งค่า" />-->
         <item
             android:id="@+id/logout"
-            android:icon="@drawable/exit"
             android:title="Log out" />
 
 

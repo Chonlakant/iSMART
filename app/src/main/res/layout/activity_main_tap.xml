@@ -91,7 +91,7 @@
                         app:tabIndicatorHeight="3dp"
                         app:tabTextColor="#fff" />
 
-                    <ismart.is.com.ismart.adapter.CustomViewPager
+                    <com.mncomunity1.adapter.CustomViewPager
                         android:id="@+id/viewpager"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
