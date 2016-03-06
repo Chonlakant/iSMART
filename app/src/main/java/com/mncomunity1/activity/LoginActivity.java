@@ -136,7 +136,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                Is_Valid_Email(inputEmail);
+              //  Is_Valid_Email(inputEmail);
             }
 
             public void Is_Valid_Email(EditText edt) {

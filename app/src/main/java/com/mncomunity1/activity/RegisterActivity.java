@@ -59,7 +59,7 @@ public class RegisterActivity extends AppCompatActivity {
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private Toolbar toolbar;
     private EditText edit_email, edit_pass, con_password, edit_name, edit_phone, edit_company;
-    String email, pass, con_pass, name, phone, company;
+    String email, pass, name, phone, company;
     private ArrayList<ChatRoom> chatRoomArrayList;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private AQuery aq;
@@ -184,10 +184,10 @@ public class RegisterActivity extends AppCompatActivity {
                 String strPass1 = edit_pass.getText().toString();
                 String strPass2 = con_password.getText().toString();
                 if (strPass1.equals(strPass2)) {
-                    loadingDialogPass.dismiss();
+                    //loadingDialogPass.dismiss();
                 } else {
 //                    Toast.makeText(getApplicationContext(), "ใส่พาสเวิร์ดไม่ตรงกัน", Toast.LENGTH_SHORT).show();
-                    loadingDialogPass.show();
+                    //loadingDialogPass.show();
                 }
             }
 
@@ -198,10 +198,13 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onLoginButtonClick();
+
+                    onLoginButtonClick();
+
             }
         });
 
@@ -221,6 +224,7 @@ public class RegisterActivity extends AppCompatActivity {
         pass = edit_pass.getText().toString();
         name = edit_name.getText().toString();
 
+
         try {
             edcondeStringName = URLDecoder.decode("", "UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -228,20 +232,23 @@ public class RegisterActivity extends AppCompatActivity {
         }
         company = edit_company.getText().toString();
         phone = edit_phone.getText().toString();
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
         Log.e("qqq", pass);
         Log.e("www", pass);
         loadingDialog.show();
 
-        if (TextUtils.isEmpty(email)) {
+        if (TextUtils.isEmpty(email) && email.matches(emailPattern)) {
             loadingDialog.dismiss();
             Toast.makeText(getApplicationContext(), "กรุณาใส่อีเมล์", Toast.LENGTH_SHORT).show();
             return;
         }
+
         if (TextUtils.isEmpty(pass)) {
             loadingDialog.dismiss();
             Toast.makeText(getApplicationContext(), "กรุณาใส่พาสเวิร์ด", Toast.LENGTH_SHORT).show();
             return;
         }
+
 
         if (TextUtils.isEmpty(name)) {
             loadingDialog.dismiss();
@@ -274,8 +281,14 @@ public class RegisterActivity extends AppCompatActivity {
         cb.url(url).type(JSONObject.class).params(params).weakHandler(this, "loginCallback");
         cb.header("Content-Type", "application/x-www-form-urlencoded");
         //cb.header("Content-Type", "application/json; charset=utf-8");
-        aq.ajax(cb);
 
+        if (!pass.equals(con)) {
+            loadingDialog.dismiss();
+            Toast.makeText(getApplicationContext(), "พาสเวิร์ด ไม่ตรง", Toast.LENGTH_LONG).show();
+            return;
+        } else {
+            aq.ajax(cb);
+        }
     }
 
     public void loginCallback(String url, JSONObject json, AjaxStatus status) throws JSONException {

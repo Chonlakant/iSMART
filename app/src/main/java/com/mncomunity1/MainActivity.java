@@ -626,14 +626,25 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
                     String link = list.get(position).getPost().get(position).getLink();
                     Uri myUri = Uri.parse(image);
 
-                    Intent shareIntent = new Intent();
-                    shareIntent.setAction(Intent.ACTION_SEND);
-                    shareIntent.putExtra(Intent.EXTRA_TEXT, title);
-                    shareIntent.putExtra(Intent.EXTRA_TEXT, link);
-                    shareIntent.putExtra(Intent.EXTRA_STREAM, myUri);
-                    shareIntent.setType("image/*");
-                    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivity(Intent.createChooser(shareIntent, "Share images..."));
+//                    Intent shareIntent = new Intent();
+//                    shareIntent.setAction(Intent.ACTION_SEND);
+//                    shareIntent.putExtra(Intent.EXTRA_TEXT, title);
+//                    shareIntent.putExtra(Intent.EXTRA_TEXT, link);
+//                    shareIntent.putExtra(Intent.EXTRA_STREAM, myUri);
+//                    shareIntent.setType("image/*");
+//                    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//                    startActivity(Intent.createChooser(shareIntent, "Share images..."));
+
+                    Intent share = new Intent(android.content.Intent.ACTION_SEND);
+                    share.setType("text/plain");
+                    share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+
+                    // Add data to the intent, the receiving app will decide
+                    // what to do with it.
+                    share.putExtra(Intent.EXTRA_SUBJECT, title);
+                    share.putExtra(Intent.EXTRA_TEXT, link);
+
+                    startActivity(Intent.createChooser(share, "Share link!"));
                 }
             });
 
