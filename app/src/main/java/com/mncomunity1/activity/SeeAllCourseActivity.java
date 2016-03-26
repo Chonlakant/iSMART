@@ -76,34 +76,34 @@ public class SeeAllCourseActivity extends AppCompatActivity {
         }
 
         Intent intent = getIntent();
-        key = getIntent().getStringExtra("key");
+        key = getIntent().getStringExtra("cat");
         Log.e("ddddd", key);
-        if (key.equals("0")) {
+        if (key.equals("MT")) {
             ApiBus.getInstance().postQueue(new MaintenanceRequestedEvent());
         }
-        if (key.equals("1")) {
+        if (key.equals("PD")) {
             ApiBus.getInstance().postQueue(new ProductionRequestedEvent());
         }
-        if (key.equals("2")) {
+        if (key.equals("SA")) {
             ApiBus.getInstance().postQueue(new SafetyRequestedEvent());
         }
-        if (key.equals("3")) {
+        if (key.equals("QC")) {
             ApiBus.getInstance().postQueue(new QualityRequestedEvent());
         }
-        if (key.equals("4")) {
+        if (key.equals("WH")) {
             Toast.makeText(getApplicationContext(), "aaa", Toast.LENGTH_SHORT).show();
             ApiBus.getInstance().postQueue(new LogisiticsRequestedEvent());
         }
-        if (key.equals("5")) {
+        if (key.equals("MA")) {
             ApiBus.getInstance().postQueue(new ManagementRequestedEvent());
         }
-        if (key.equals("6")) {
+        if (key.equals("IS")) {
             ApiBus.getInstance().postQueue(new IsoRequestedEvent());
         }
-        if (key.equals("7")) {
+        if (key.equals("PC")) {
             ApiBus.getInstance().postQueue(new PurchaseRequestedEvent());
         }
-        if (key.equals("8")) {
+        if (key.equals("SM")) {
             ApiBus.getInstance().postQueue(new SaleRequestedEvent());
         }
 
@@ -209,10 +209,10 @@ public class SeeAllCourseActivity extends AppCompatActivity {
             myCourseRecyclerAdapter.SetOnItemVideiosClickListener(new MyCourseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    String id = list.get(position).getPost().get(position).getCode();
-                    Intent i = new Intent(getApplicationContext(),DetailCourseActivity.class);
-                    i.putExtra("id",id);
-                    startActivity(i);
+//                    String id = list.get(position).getPost().get(position).getCode();
+//                    Intent i = new Intent(getApplicationContext(),DetailCourseActivity.class);
+//                    i.putExtra("id",id);
+//                    startActivity(i);
                 }
             });
 

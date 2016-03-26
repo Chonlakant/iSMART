@@ -40,6 +40,10 @@ import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.mncomunity1.activity.AllCourseActivity;
+import com.mncomunity1.activity.DetailCourseActivity;
+import com.mncomunity1.activity.ListLayer1Activity;
+import com.mncomunity1.activity.ListWebViewActivity;
+import com.mncomunity1.activity.VideoCacheActivity;
 import com.mncomunity1t.R;
 import com.squareup.otto.Subscribe;
 
@@ -119,7 +123,6 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
         progressBar2.setVisibility(View.VISIBLE);
         ApiBus.getInstance().postQueue(new FeedRequestedEvent());
         ApiBus.getInstance().postQueue(new PhotoRequestedEvent());
-
 
 
         //String selfUserId = IsmartApp.getInstance().getPrefManager().getUser().getId();
@@ -212,8 +215,10 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
         LinearLayout Tip = (LinearLayout) navigationView.findViewById(R.id.Tip);
         LinearLayout Energy = (LinearLayout) navigationView.findViewById(R.id.Energy);
         LinearLayout Success = (LinearLayout) navigationView.findViewById(R.id.Success);
+        LinearLayout vdo = (LinearLayout) navigationView.findViewById(R.id.vdo);
         LinearLayout About = (LinearLayout) navigationView.findViewById(R.id.About);
         LinearLayout Log = (LinearLayout) navigationView.findViewById(R.id.Log);
+
 
         Picasso.with(getApplicationContext())
                 .load("http://www.mx7.com/i/9e5/TRzJwU.png")
@@ -278,8 +283,18 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
             public void onClick(View v) {
                 Intent intent2 = new Intent(getApplicationContext(), AboutWebViewActivity.class);
                 intent2.putExtra("link", "http://mn-community.com/community_service/about_us.php");
+                intent2.putExtra("key","About");
                 startActivity(intent2);
                 drawerLayout.closeDrawers();
+            }
+        });
+        vdo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(),TrainCourseActivity.class);
+                startActivity(i);
+
+
             }
         });
         Log.setOnClickListener(new View.OnClickListener() {
@@ -586,7 +601,7 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
                 apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
                         .show();
             } else {
-                Log.i(TAG, "This device is not supported. Google Play Services not installed!");
+                Log.i(TAG, "This device is not supported.  Google Play Services not installed!");
                 Toast.makeText(getApplicationContext(), "This device is not supported. Google Play Services not installed!", Toast.LENGTH_LONG).show();
                 finish();
             }
@@ -641,7 +656,7 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
 
                     // Add data to the intent, the receiving app will decide
                     // what to do with it.
-                    share.putExtra(Intent.EXTRA_SUBJECT, title);
+                    share.putExtra(Intent.EXTRA_SUBJECT, "ข่าวสารจาก Maintenance Community");
                     share.putExtra(Intent.EXTRA_TEXT, link);
 
                     startActivity(Intent.createChooser(share, "Share link!"));
@@ -652,8 +667,10 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
                 @Override
                 public void onItemClick(View view, int position) {
                     String link = list.get(position).getPost().get(position).getLink();
-                    Intent intent2 = new Intent(getApplicationContext(), AboutWebViewActivity.class);
+                    String title = list.get(position).getPost().get(position).getTitle();
+                    Intent intent2 = new Intent(getApplicationContext(), ListWebViewActivity.class);
                     intent2.putExtra("link", link);
+                    intent2.putExtra("title",title);
                     startActivity(intent2);
                 }
             });

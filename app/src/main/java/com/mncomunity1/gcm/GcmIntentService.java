@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.mncomunity1.Constant;
 import com.mncomunity1.IsmartApp;
 import com.mncomunity1.PrefManager;
 import com.mncomunity1.app.Config;
@@ -35,7 +36,7 @@ import com.mncomunity1t.R;
 public class GcmIntentService extends IntentService {
     PrefManager pref;
     private static final String TAG = GcmIntentService.class.getSimpleName();
-
+    String token;
     public GcmIntentService() {
         super(TAG);
     }
@@ -49,6 +50,7 @@ public class GcmIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         String key = intent.getStringExtra(KEY);
+
         switch (key) {
             case SUBSCRIBE:
                 // subscribe to a topic
@@ -60,6 +62,7 @@ public class GcmIntentService extends IntentService {
             default:
                 // if key is specified, register with GCM
                 registerGCM();
+                pref = IsmartApp.getPrefManagerPaty();
         }
 
     }
@@ -69,12 +72,12 @@ public class GcmIntentService extends IntentService {
      */
     private void registerGCM() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        pref = IsmartApp.getPrefManagerPaty();
+
         try {
             InstanceID instanceID = InstanceID.getInstance(this);
-            String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
+             token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-
+            Constant.token = token;
             Log.e(TAG, "GCM Registration Token: " + token);
             pref.token().put(token);
             pref.commit();

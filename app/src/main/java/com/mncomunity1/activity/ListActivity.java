@@ -166,7 +166,7 @@ public class ListActivity extends AppCompatActivity {
             Log.e("cat", cat);
             if (toolbar != null) {
                 setSupportActionBar(toolbar);
-                getSupportActionBar().setTitle("Tip");
+                getSupportActionBar().setTitle("Tip / Technique");
                 toolbar.setTitleTextColor(Color.BLACK);
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -442,9 +442,11 @@ public class ListActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(View view, int position) {
                         String link = listNews.get(position).getPost().get(position).getLink();
-                        Log.e("qqqq", link);
+                        String title = listNews.get(position).getPost().get(position).getTitle();
+                        Log.e("bbbb", link+title);
                         Intent i = new Intent(getApplicationContext(), ListWebViewActivity.class);
                         i.putExtra("link", link);
+                        i.putExtra("title",title);
                         startActivity(i);
                     }
                 });
@@ -471,9 +473,11 @@ public class ListActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(View view, int position) {
                     String link = listEnningy.get(position).getPost().get(position).getLink();
-                    Log.e("qqqq", link);
+                    String title = listEnningy.get(position).getPost().get(position).getTitle();
+                    Log.e("bbbb", link+title);
                     Intent i = new Intent(getApplicationContext(), ListWebViewActivity.class);
                     i.putExtra("link", link);
+                    i.putExtra("title",title);
                     startActivity(i);
                 }
             });
@@ -498,9 +502,11 @@ public class ListActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(View view, int position) {
                     String link = listSuccess.get(position).getPost().get(position).getLink();
-                    Log.e("qqqq", link);
+                    String title = listSuccess.get(position).getPost().get(position).getTitle();
+                    Log.e("bbbb", link+title);
                     Intent i = new Intent(getApplicationContext(), ListWebViewActivity.class);
                     i.putExtra("link", link);
+                    i.putExtra("title",title);
                     startActivity(i);
                 }
             });
@@ -523,9 +529,11 @@ public class ListActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(View view, int position) {
                     String link = listMainten.get(position).getPost().get(position).getLink();
-                    Log.e("bbbb", link);
+                    String title = listMainten.get(position).getPost().get(position).getTitle();
+                    Log.e("bbbb", link+title);
                     Intent i = new Intent(getApplicationContext(), ListWebViewActivity.class);
                     i.putExtra("link", link);
+                    i.putExtra("title",title);
                     startActivity(i);
                 }
             });
@@ -551,9 +559,11 @@ public class ListActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(View view, int position) {
                     String link = listpd.get(position).getPost().get(position).getLink();
-                    Log.e("qqqq", link);
+                    String title = listpd.get(position).getPost().get(position).getTitle();
+                    Log.e("bbbb", link+title);
                     Intent i = new Intent(getApplicationContext(), ListWebViewActivity.class);
                     i.putExtra("link", link);
+                    i.putExtra("title",title);
                     startActivity(i);
                 }
             });
@@ -578,9 +588,11 @@ public class ListActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(View view, int position) {
                     String link = listwh.get(position).getPost().get(position).getLink();
-                    Log.e("qqqq", link);
+                    String title = listwh.get(position).getPost().get(position).getTitle();
+                    Log.e("bbbb", link+title);
                     Intent i = new Intent(getApplicationContext(), ListWebViewActivity.class);
                     i.putExtra("link", link);
+                    i.putExtra("title",title);
                     startActivity(i);
                 }
             });
@@ -605,9 +617,11 @@ public class ListActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(View view, int position) {
                     String link = listsa.get(position).getPost().get(position).getLink();
-                    Log.e("qqqq", link);
+                    String title = listsa.get(position).getPost().get(position).getTitle();
+                    Log.e("bbbb", link+title);
                     Intent i = new Intent(getApplicationContext(), ListWebViewActivity.class);
                     i.putExtra("link", link);
+                    i.putExtra("title",title);
                     startActivity(i);
                 }
             });
@@ -631,9 +645,11 @@ public class ListActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(View view, int position) {
                     String link = listqt.get(position).getPost().get(position).getLink();
-                    Log.e("qqqq", link);
+                    String title = listqt.get(position).getPost().get(position).getTitle();
+                    Log.e("bbbb", link+title);
                     Intent i = new Intent(getApplicationContext(), ListWebViewActivity.class);
                     i.putExtra("link", link);
+                    i.putExtra("title",title);
                     startActivity(i);
                 }
             });
@@ -657,9 +673,11 @@ public class ListActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(View view, int position) {
                     String link = listma.get(position).getPost().get(position).getLink();
-                    Log.e("qqqq", link);
+                    String title = listma.get(position).getPost().get(position).getTitle();
+                    Log.e("bbbb", link+title);
                     Intent i = new Intent(getApplicationContext(), ListWebViewActivity.class);
                     i.putExtra("link", link);
+                    i.putExtra("title",title);
                     startActivity(i);
                 }
             });
@@ -680,9 +698,11 @@ public class ListActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(View view, int position) {
                     String link = listis.get(position).getPost().get(position).getLink();
-                    Log.e("qqqq", link);
+                    String title = listis.get(position).getPost().get(position).getTitle();
+                    Log.e("bbbb", link+title);
                     Intent i = new Intent(getApplicationContext(), ListWebViewActivity.class);
                     i.putExtra("link", link);
+                    i.putExtra("title",title);
                     startActivity(i);
                 }
             });
@@ -706,9 +726,11 @@ public class ListActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(View view, int position) {
                     String link = listpc.get(position).getPost().get(position).getLink();
-                    Log.e("qqqq", link);
+                    String title = listpc.get(position).getPost().get(position).getTitle();
+                    Log.e("bbbb", link+title);
                     Intent i = new Intent(getApplicationContext(), ListWebViewActivity.class);
                     i.putExtra("link", link);
+                    i.putExtra("title",title);
                     startActivity(i);
                 }
             });
@@ -731,9 +753,11 @@ public class ListActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(View view, int position) {
                     String link = listsa.get(position).getPost().get(position).getLink();
-                    Log.e("qqqq", link);
+                    String title = listsa.get(position).getPost().get(position).getTitle();
+                    Log.e("bbbb", link+title);
                     Intent i = new Intent(getApplicationContext(), ListWebViewActivity.class);
                     i.putExtra("link", link);
+                    i.putExtra("title",title);
                     startActivity(i);
                 }
             });
@@ -757,9 +781,11 @@ public class ListActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(View view, int position) {
                     String link = listtip.get(position).getPost().get(position).getLink();
-                    Log.e("bbbb", link);
+                    String title = listtip.get(position).getPost().get(position).getTitle();
+                    Log.e("bbbb", link + title);
                     Intent i = new Intent(getApplicationContext(), ListWebViewActivity.class);
                     i.putExtra("link", link);
+                    i.putExtra("title",title);
                     startActivity(i);
                 }
             });

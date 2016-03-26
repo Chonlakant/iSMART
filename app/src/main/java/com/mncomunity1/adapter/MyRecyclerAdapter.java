@@ -45,6 +45,12 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Co
                 .load(item.getPost().get(i).getFile_img())
                 .fit().centerCrop()
                 .into(contactViewHolder.image_detail);
+//
+//        Picasso.with(context)
+//                .load(item.getPost().get(i).getFile_img())
+//                .fit()
+//                .centerInside()
+//                .into(contactViewHolder.image_detail);
 
         Picasso.with(context)
                 .load("http://www.mx7.com/i/9e5/TRzJwU.png")

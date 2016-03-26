@@ -31,6 +31,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.iid.InstanceID;
 import com.google.android.gms.tagmanager.Container;
 import com.google.android.gms.tagmanager.TagManager;
 import com.madx.updatechecker.lib.UpdateRunnable;
@@ -48,10 +50,7 @@ public class LoginActivity extends AppCompatActivity {
     AlertDialogManager alert = new AlertDialogManager();
     // Internet detector
     ConnectionDetector cd;
-    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    private String TAG = LoginActivity.class.getSimpleName();
     private EditText inputPass, inputEmail;
-    private TextInputLayout inputLayoutName, inputLayoutEmail;
     private Button btnEnter;
     private TextView txt_register, textView13;
     private String regId;
@@ -77,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
         cd = new ConnectionDetector(getApplicationContext());
         aq = new AQuery(this);
         pref = IsmartApp.getPrefManagerPaty();
-        regId = pref.token().getOr("bbb");
+
 
         // Check if Internet present
         if (!cd.isConnectingToInternet()) {
@@ -86,6 +85,7 @@ public class LoginActivity extends AppCompatActivity {
             // stop executing code by return
             return;
         }
+
 
 
         loadingDialog = new Dialog(LoginActivity.this, R.style.FullHeightDialog);
@@ -118,11 +118,8 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-        if (checkPlayServices()) {
-            registerGCM();
-            //fetchChatRooms();
-        }
-
+        regId = pref.token().getOr("Token cannot");
+        Log.e("cccc", regId);
         inputEmail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -383,37 +380,9 @@ public class LoginActivity extends AppCompatActivity {
 //        }
 //    }
 
-    private void registerGCM() {
-        Intent intent = new Intent(this, GcmIntentService.class);
-        intent.putExtra("key", "register");
-        startService(intent);
-    }
 
 
-    public static boolean checkEmail(String email) {
 
-        Pattern EMAIL_ADDRESS_PATTERN = Pattern
-                .compile("[a-zA-Z0-9+._%-+]{1,256}" + "@"
-                        + "[a-zA-Z0-9][a-zA-Z0-9-]{0,64}" + "(" + "."
-                        + "[a-zA-Z0-9][a-zA-Z0-9-]{0,25}" + ")+");
-        return EMAIL_ADDRESS_PATTERN.matcher(email).matches();
-    }
 
-    private boolean checkPlayServices() {
-        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (apiAvailability.isUserResolvableError(resultCode)) {
-                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
-                        .show();
-            } else {
-                Log.e("TAG", "This device is not supported. Google Play Services not installed!");
-                Toast.makeText(getApplicationContext(), "This device is not supported. Google Play Services not installed!", Toast.LENGTH_LONG).show();
-                finish();
-            }
-            return false;
-        }
-        return true;
-    }
 
 }

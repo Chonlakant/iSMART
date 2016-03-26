@@ -11,14 +11,14 @@ import com.squareup.picasso.Picasso;
 
 import com.mncomunity1.event.ActivityResultBus;
 import com.mncomunity1.event.ApiBus;
-import it.sephiroth.android.library.imagezoom.ImageViewTouch;
-import it.sephiroth.android.library.imagezoom.ImageViewTouchBase;
+//import it.sephiroth.android.library.imagezoom.ImageViewTouch;
+//import it.sephiroth.android.library.imagezoom.ImageViewTouchBase;
 
 public class PhotoActivity extends AppCompatActivity {
 
 
     String urlImage;
-    ImageViewTouch imageView;
+    //ImageViewTouch imageView;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_item_list, menu);
@@ -34,11 +34,11 @@ public class PhotoActivity extends AppCompatActivity {
         urlImage = getIntent().getStringExtra("photos");
         Log.e("ddddd",urlImage);
         String url = Constant.enPointh + urlImage;
-        imageView = (ImageViewTouch) findViewById(R.id.imageView);
-        imageView.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
-        Picasso.with(getApplicationContext())
-                .load(url)
-                .into(imageView);
+//        imageView = (ImageViewTouch) findViewById(R.id.imageView);
+//        imageView.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
+//        Picasso.with(getApplicationContext())
+//                .load(url)
+//                .into(imageView);
     }
 
     @Override

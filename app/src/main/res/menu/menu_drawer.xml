@@ -23,6 +23,10 @@
             android:icon="@drawable/circled"
             android:title="Tips / Technique" />
         <item
+            android:id="@+id/vdo"
+            android:icon="@drawable/circled"
+            android:title="VDO" />
+        <item
             android:id="@+id/enterprise"
             android:icon="@drawable/circled"
             android:title="Energy Saving" />

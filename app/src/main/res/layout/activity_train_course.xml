@@ -9,16 +9,22 @@
         layout="@layout/tool_bar" />
 
 
-        <android.support.v7.widget.RecyclerView
-            android:layout_marginTop="55dp"
-            android:id="@+id/cardList_main"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
+        <!--<android.support.v7.widget.RecyclerView-->
+            <!--android:layout_marginTop="55dp"-->
+            <!--android:id="@+id/cardList_main"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent" />-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/cardList_main"
+        android:layout_marginTop="58dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/progressBar4"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
+
+
 </RelativeLayout>

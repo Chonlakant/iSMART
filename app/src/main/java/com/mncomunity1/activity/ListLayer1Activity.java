@@ -60,7 +60,7 @@ public class ListLayer1Activity extends AppCompatActivity {
 
         if (toolbar != null) {
             setSupportActionBar(toolbar);
-            getSupportActionBar().setTitle("Article");
+            getSupportActionBar().setTitle("Articles");
             toolbar.setTitleTextColor(Color.BLACK);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -88,9 +88,11 @@ public class ListLayer1Activity extends AppCompatActivity {
             @Override
             public void onItemClick(View view, int position) {
                 String link = list.get(position).getLink();
+                String title = list.get(position).getTitle();
                 Log.e("qqqq", link);
                 Intent i = new Intent(getApplicationContext(), ListWebViewActivity.class);
                 i.putExtra("link", link);
+                i.putExtra("title", title);
                 startActivity(i);
             }
         });

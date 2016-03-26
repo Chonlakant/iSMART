@@ -19,6 +19,7 @@ public class ListWebViewActivity extends AppCompatActivity {
     ProgressBar progressBar5;
     WebView webview;
     String link;
+    String title;
     private Toolbar toolbar;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -33,10 +34,11 @@ public class ListWebViewActivity extends AppCompatActivity {
         webview = (WebView) findViewById(R.id.webview);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         progressBar5 = (ProgressBar) findViewById(R.id.progressBar5);
+        title = getIntent().getStringExtra("title");
         progressBar5.setVisibility(View.VISIBLE);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
-            getSupportActionBar().setTitle("News");
+            getSupportActionBar().setTitle(title);
             toolbar.setTitleTextColor(Color.BLACK);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -54,11 +56,15 @@ public class ListWebViewActivity extends AppCompatActivity {
         Log.e("link", link);
 
         webview.loadUrl(link);
-
+        webview.getSettings().setBuiltInZoomControls(true);
+        webview.setInitialScale(1);
+        webview.getSettings().setLoadWithOverviewMode(true);
+        webview.getSettings().setUseWideViewPort(true);
         webview.getSettings().setJavaScriptEnabled(true);
         webview.setWebViewClient(new WebViewClient() {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.loadUrl(url);
+
                 return true;
             }
 
@@ -66,7 +72,7 @@ public class ListWebViewActivity extends AppCompatActivity {
                 progressBar5.setVisibility(View.GONE);
             }
         });
-        webview.getSettings().setBuiltInZoomControls(true);
+
     }
 
     @Override

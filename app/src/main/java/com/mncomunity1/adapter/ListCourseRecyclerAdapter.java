@@ -18,7 +18,6 @@ import com.mncomunity1t.R;
 
 public class ListCourseRecyclerAdapter extends RecyclerView.Adapter<ListCourseRecyclerAdapter.ContactViewHolder> {
 
-    private List<listMain> contactList;
     Context context;
     ArrayList<Post> list = new ArrayList<>();
     public static OnItemClickListener mItemClickListener;

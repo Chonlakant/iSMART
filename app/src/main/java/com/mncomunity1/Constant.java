@@ -6,4 +6,5 @@ package com.mncomunity1;
 public class Constant {
 
     public static final String enPointh = "http://mn-community.com/gcm_chat/v1/uploads/";
+    public static String token = "";
 }

@@ -63,8 +63,8 @@ public class DetailCourseActivity extends AppCompatActivity implements CacheList
     List<Post> list = new ArrayList<>();
 
     private static final String LOG_TAG = "VideoActivity";
-    private static String VIDEO_CACHE_NAME ="http://www.fieldandrurallife.tv/videos/Benltey%20Mulsanne.mp4";
-    private static  String VIDEO_URL = "http://www.fieldandrurallife.tv/videos/Benltey%20Mulsanne.mp4";
+    private static String VIDEO_CACHE_NAME ="http://mn-community.com/video/Commu.mp4";
+    private static  String VIDEO_URL = "http://mn-community.com/video/Commu.mp4";
 
     private ProgressBar progressBar;
     private HttpProxyCache proxyCache;
@@ -106,8 +106,7 @@ public class DetailCourseActivity extends AppCompatActivity implements CacheList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_detail);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        id = getIntent().getStringExtra("id");
-        Log.e("aaaa",id);
+        //id = getIntent().getStringExtra("id");
        // ApiBus.getInstance().postQueue(new TrainningRequestedEvent(id));
 
         if (toolbar != null) {

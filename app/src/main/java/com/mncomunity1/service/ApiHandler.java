@@ -315,6 +315,7 @@ public class ApiHandler {
             @Override
             public void success(Post post, Response response) {
                 ApiBus.getInstance().postQueue(new TipReceivedEvent(post));
+                Log.e("aaaa",post.getPost().size()+"");
             }
 
             @Override
@@ -330,6 +331,7 @@ public class ApiHandler {
             @Override
             public void success(Post post, Response response) {
                 ApiBus.getInstance().postQueue(new TraingReceivedEvent(post));
+                Log.e("ddddd",post.getPost().size()+"");
             }
 
             @Override
