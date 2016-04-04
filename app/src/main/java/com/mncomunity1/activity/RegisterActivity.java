@@ -4,11 +4,8 @@ import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
@@ -18,7 +15,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -26,15 +22,11 @@ import android.widget.Toast;
 import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxCallback;
 import com.androidquery.callback.AjaxStatus;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.iid.InstanceID;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -46,14 +38,11 @@ import com.mncomunity1.ConnectionDetector;
 import com.mncomunity1.IsmartApp;
 import com.mncomunity1.MainActivity;
 import com.mncomunity1.PrefManager;
-import com.mncomunity1.app.Config;
 
-import com.mncomunity1.gcm.GcmIntentService;
-import com.mncomunity1.gcm.NotificationUtils;
 import com.mncomunity1.model.ChatRoom;
 import com.mncomunity1.model.Message;
 import com.mncomunity1.model.User;
-import com.mncomunity1t.R;
+import com.mncomunity1.R;
 
 public class RegisterActivity extends AppCompatActivity {
     private BroadcastReceiver mRegistrationBroadcastReceiver;
@@ -137,44 +126,10 @@ public class RegisterActivity extends AppCompatActivity {
 
         }
 
-        InstanceID instanceID = InstanceID.getInstance(this);
-        String token = null;
-        try {
-            token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
-                    GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
 
         Log.e("TAG", "GCM Registration RegisterActivity!!!: " + pref.token().getOr("NONO"));
         regId = pref.token().getOr("aaaa");
 
-        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-
-                // checking for type intent filter
-                if (intent.getAction().equals(Config.REGISTRATION_COMPLETE)) {
-                    // gcm successfully registered
-                    // now subscribe to `global` topic to receive app wide notifications
-                    subscribeToGlobalTopic();
-
-                } else if (intent.getAction().equals(Config.SENT_TOKEN_TO_SERVER)) {
-                    // gcm registration id is stored in our server's MySQL
-                    Log.e("TAG", "GCM registration id is sent to our server");
-
-                } else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
-                    // new push notification is received
-                    handlePushNotification(intent);
-                }
-            }
-        };
-
-        if (checkPlayServices()) {
-            registerGCM();
-            //fetchChatRooms();
-        }
 //        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 //        builder.setTitle("Enter Password");
 //        builder.setView(layout);
@@ -210,13 +165,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-
-    private void subscribeToGlobalTopic() {
-        Intent intent = new Intent(this, GcmIntentService.class);
-        intent.putExtra(GcmIntentService.KEY, GcmIntentService.SUBSCRIBE);
-        intent.putExtra(GcmIntentService.TOPIC, Config.TOPIC_GLOBAL);
-        startService(intent);
-    }
 
     private void onLoginButtonClick() {
         con = con_password.getText().toString();
@@ -331,85 +279,17 @@ public class RegisterActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private void handlePushNotification(Intent intent) {
-        int type = intent.getIntExtra("type", -1);
-
-        // if the push is of chat room message
-        // simply update the UI unread messages count
-        if (type == Config.PUSH_TYPE_CHATROOM) {
-            Message message = (Message) intent.getSerializableExtra("message");
-            String chatRoomId = intent.getStringExtra("chat_room_id");
-
-            if (message != null && chatRoomId != null) {
-                updateRow(chatRoomId, message);
-            }
-        } else if (type == Config.PUSH_TYPE_USER) {
-            // push belongs to user alone
-            // just showing the message in a toast
-            Message message = (Message) intent.getSerializableExtra("message");
-            Toast.makeText(getApplicationContext(), "New push: " + message.getMessage(), Toast.LENGTH_LONG).show();
-        }
 
 
-    }
-
-    /**
-     * Updates the chat list unread count and the last message
-     */
-    private void updateRow(String chatRoomId, Message message) {
-        for (ChatRoom cr : chatRoomArrayList) {
-            if (cr.getId().equals(chatRoomId)) {
-                int index = chatRoomArrayList.indexOf(cr);
-                cr.setLastMessage(message.getMessage());
-                cr.setUnreadCount(cr.getUnreadCount() + 1);
-                chatRoomArrayList.remove(index);
-                chatRoomArrayList.add(index, cr);
-                break;
-            }
-        }
-        // mAdapter.notifyDataSetChanged();
-    }
 
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        // register GCM registration complete receiver
-        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-                new IntentFilter(Config.REGISTRATION_COMPLETE));
-
-        // register new push message receiver
-        // by doing this, the activity will be notified each time a new message arrives
-        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-                new IntentFilter(Config.PUSH_NOTIFICATION));
-
-        // clearing the notification tray
-        NotificationUtils.clearNotifications();
     }
 
-    private void registerGCM() {
-        Intent intent = new Intent(this, GcmIntentService.class);
-        intent.putExtra("key", "register");
-        startService(intent);
-    }
 
-    private boolean checkPlayServices() {
-        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (apiAvailability.isUserResolvableError(resultCode)) {
-                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
-                        .show();
-            } else {
-                Log.e("TAG", "This device is not supported. Google Play Services not installed!");
-                Toast.makeText(getApplicationContext(), "This device is not supported. Google Play Services not installed!", Toast.LENGTH_LONG).show();
-                finish();
-            }
-            return false;
-        }
-        return true;
-    }
 
 
 }

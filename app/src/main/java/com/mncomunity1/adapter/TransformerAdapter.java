@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.daimajia.slider.library.SliderLayout;
-import com.mncomunity1t.R;
+import com.mncomunity1.R;
 
 
 /**

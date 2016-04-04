@@ -14,7 +14,7 @@ import java.util.List;
 
 import com.mncomunity1.model.Post;
 import com.mncomunity1.model.listMain;
-import com.mncomunity1t.R;
+import com.mncomunity1.R;
 
 public class ListRecyclerAdapter extends RecyclerView.Adapter<ListRecyclerAdapter.ContactViewHolder> {
 

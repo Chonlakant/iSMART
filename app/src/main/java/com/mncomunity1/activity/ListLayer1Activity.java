@@ -25,7 +25,7 @@ import com.mncomunity1.adapter.ListRecyclerAdapter;
 import com.mncomunity1.event.ActivityResultBus;
 import com.mncomunity1.event.ApiBus;
 import com.mncomunity1.model.Post;
-import com.mncomunity1t.R;
+import com.mncomunity1.R;
 
 public class ListLayer1Activity extends AppCompatActivity {
     ProgressBar progressBar3;

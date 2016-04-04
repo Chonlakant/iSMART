@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import com.mncomunity1.model.ChatRoom;
-import com.mncomunity1t.R;
+import com.mncomunity1.R;
 
 
 public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.ViewHolder> {

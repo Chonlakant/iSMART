@@ -1,19 +1,12 @@
 package com.mncomunity1.activity;
 
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.telephony.TelephonyManager;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -24,28 +17,13 @@ import android.widget.Toast;
 import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxCallback;
 import com.androidquery.callback.AjaxStatus;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.iid.InstanceID;
-import com.mncomunity1.AlertDialogManager;
-import com.mncomunity1.ConnectionDetector;
 import com.mncomunity1.IsmartApp;
-import com.mncomunity1.MainActivity;
 import com.mncomunity1.PrefManager;
-import com.mncomunity1.app.Config;
-import com.mncomunity1.gcm.GcmIntentService;
-import com.mncomunity1.gcm.NotificationUtils;
-import com.mncomunity1.model.ChatRoom;
-import com.mncomunity1.model.Message;
-import com.mncomunity1.model.User;
-import com.mncomunity1t.R;
+import com.mncomunity1.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 

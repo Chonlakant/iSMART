@@ -38,7 +38,7 @@ import com.mncomunity1.video.DensityUtil;
 import com.mncomunity1.video.FullScreenVideoView;
 import com.mncomunity1.video.LightnessController;
 import com.mncomunity1.video.VolumnController;
-import com.mncomunity1t.R;
+import com.mncomunity1.R;
 
 public class VideoCacheActivity extends Activity implements CacheListener,View.OnClickListener {
 

@@ -10,7 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.MenuItem;
 
-import com.mncomunity1t.R;
+import com.mncomunity1.R;
 
 import butterknife.ButterKnife;
 

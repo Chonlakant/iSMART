@@ -13,7 +13,7 @@ import android.widget.ProgressBar;
 
 import com.mncomunity1.event.ActivityResultBus;
 import com.mncomunity1.event.ApiBus;
-import com.mncomunity1t.R;
+import com.mncomunity1.R;
 
 public class ListWebViewActivity extends AppCompatActivity {
     ProgressBar progressBar5;

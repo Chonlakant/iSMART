@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import com.mncomunity1.model.Post;
-import com.mncomunity1t.R;
+import com.mncomunity1.R;
 
 public class MyCourseRecyclerAdapter extends RecyclerView.Adapter<MyCourseRecyclerAdapter.ContactViewHolder> {
 

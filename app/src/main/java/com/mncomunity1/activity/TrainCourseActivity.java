@@ -15,7 +15,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.mncomunity1.adapter.ListCourseRecyclerAdapter;
-import com.mncomunity1t.R;
+import com.mncomunity1.R;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;

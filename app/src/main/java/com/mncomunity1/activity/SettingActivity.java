@@ -7,7 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 
-import com.mncomunity1t.R;
+import com.mncomunity1.R;
 import com.squareup.otto.Subscribe;
 
 import com.mncomunity1.event.ActivityResultBus;

@@ -8,7 +8,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.mncomunity1t.R;
+import com.mncomunity1.R;
 
 
 public class CourseListviewAdapter extends BaseAdapter implements AdapterView.OnClickListener {

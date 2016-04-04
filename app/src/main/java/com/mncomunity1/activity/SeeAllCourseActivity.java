@@ -12,7 +12,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
-import com.mncomunity1t.R;
+import com.mncomunity1.R;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;

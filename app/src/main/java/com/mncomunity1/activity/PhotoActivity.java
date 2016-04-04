@@ -6,7 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 
 import com.mncomunity1.Constant;
-import com.mncomunity1t.R;
+import com.mncomunity1.R;
 import com.squareup.picasso.Picasso;
 
 import com.mncomunity1.event.ActivityResultBus;

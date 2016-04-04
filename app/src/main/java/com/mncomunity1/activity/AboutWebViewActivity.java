@@ -12,7 +12,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import com.mncomunity1.event.TipRequestedEvent;
-import com.mncomunity1t.R;
+import com.mncomunity1.R;
 
 import com.mncomunity1.event.ActivityResultBus;
 import com.mncomunity1.event.ApiBus;

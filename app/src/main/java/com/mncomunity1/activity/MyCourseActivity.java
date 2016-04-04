@@ -11,7 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
-import com.mncomunity1t.R;
+import com.mncomunity1.R;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -106,13 +106,6 @@ public class MyCourseActivity extends AppCompatActivity {
             myCourseRecyclerAdapter.SetOnItemVideiosClickListener(new MyCourseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-//                    Intent intent = new Intent(getApplicationContext(), MainActivityTap.class);
-//                    startActivity(intent);
-
-                    Intent intent = new Intent(getApplicationContext(), ChatRoomActivity.class);
-                    intent.putExtra("chat_room_id", "8");
-                    intent.putExtra("name", "Realtime Chat App");
-                    startActivity(intent);
 
 
                 }

@@ -24,7 +24,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 
-import com.mncomunity1t.R;
+import com.mncomunity1.R;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

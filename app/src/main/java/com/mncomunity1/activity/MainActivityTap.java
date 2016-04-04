@@ -24,7 +24,7 @@ import com.mncomunity1.OnFragmentInteractionListener;
 import com.mncomunity1.adapter.CustomViewPager;
 import com.mncomunity1.adapter.FragmentPageAdapter;
 import com.mncomunity1.fragment.VideoFragment;
-import com.mncomunity1t.R;
+import com.mncomunity1.R;
 
 
 public class MainActivityTap extends BaseActivity implements OnFragmentInteractionListener {

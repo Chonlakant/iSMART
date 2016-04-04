@@ -15,10 +15,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxCallback;
 import com.androidquery.callback.AjaxStatus;
 import com.google.android.gcm.GCMRegistrar;
+import com.madx.updatechecker.lib.UpdateRunnable;
+import com.mncomunity1.AlertDialogManager;
+import com.mncomunity1.Config;
+import com.mncomunity1.ConnectionDetector;
+import com.mncomunity1.IsmartApp;
+import com.mncomunity1.MainActivity;
+import com.mncomunity1.PrefManager;
+import com.mncomunity1.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,18 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-import com.madx.updatechecker.lib.UpdateRunnable;
-import com.mncomunity1.AlertDialogManager;
-import com.mncomunity1.Config;
-import com.mncomunity1.ConnectionDetector;
-import com.mncomunity1.IsmartApp;
-import com.mncomunity1.MainActivity;
-import com.mncomunity1.PrefManager;
-import com.mncomunity1.model.User;
-import com.mncomunity1.R;
-
-
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivityTest extends AppCompatActivity {
     AlertDialogManager alert = new AlertDialogManager();
     // Internet detector
     ConnectionDetector cd;
@@ -63,57 +61,19 @@ public class LoginActivity extends AppCompatActivity {
         cd = new ConnectionDetector(getApplicationContext());
         aq = new AQuery(this);
         pref = IsmartApp.getPrefManagerPaty();
-        final IsmartApp aController = (IsmartApp) getApplicationContext();
+
 
         // Check if Internet present
         if (!cd.isConnectingToInternet()) {
             // Internet Connection is not present
-            alert.showAlertDialog(LoginActivity.this, "Internet Connection Error", "Please connect to working Internet connection", false);
-            // stop executing code by return
-            return;
-        }
-        GCMRegistrar.checkDevice(this);
-        GCMRegistrar.checkManifest(this);
-
-
-
-        //GCMRegistrar.register(this, Config.GOOGLE_SENDER_ID);
-        String regIdNew = "";
-        if (GCMRegistrar.isRegistered(this)) {
-            regIdNew = GCMRegistrar.getRegistrationId(this);
-            Log.e("regIdNew1", regIdNew);
-        } else {
-            GCMRegistrar.register(this, Config.GOOGLE_SENDER_ID);
-            Log.e("regIdNew2", regIdNew);
-        }
-        if (regIdNew.equals("")) {
-            GCMRegistrar.register(this, Config.GOOGLE_SENDER_ID);
-            Log.e("regIdNew3", regIdNew);
-        } else {
-
-        }
-
-
-        String regId1 = regIdNew;
-        REGID = regId1;
-        Log.e("REGID",regId1);
-        Toast.makeText(getApplicationContext(),regId1,Toast.LENGTH_SHORT).show();
-        // Toast.makeText(getBaseContext(), "Got Message: check "+regIdNew , Toast.LENGTH_LONG).show();
-
-        // Check if GCM configuration is set
-        if (Config.YOUR_SERVER_URL == null || Config.GOOGLE_SENDER_ID == null || Config.YOUR_SERVER_URL.length() == 0
-                || Config.GOOGLE_SENDER_ID.length() == 0) {
-
-            // GCM sernder id / server url is missing
-            aController.showAlertDialog(LoginActivity.this, "Configuration Error!",
-                    "Please set your Server URL and GCM Sender ID", false);
-
+            alert.showAlertDialog(LoginActivityTest.this, "Internet Connection Error", "Please connect to working Internet connection", false);
             // stop executing code by return
             return;
         }
 
+        final IsmartApp aController = (IsmartApp) getApplicationContext();
 
-        loadingDialog = new Dialog(LoginActivity.this, R.style.FullHeightDialog);
+        loadingDialog = new Dialog(LoginActivityTest.this, R.style.FullHeightDialog);
         textView13 = (TextView) findViewById(R.id.textView13);
         loadingDialog.setContentView(R.layout.dialog_loading);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -125,7 +85,43 @@ public class LoginActivity extends AppCompatActivity {
         inputEmail = (EditText) findViewById(R.id.input_email);
         btnEnter = (Button) findViewById(R.id.btn_enter);
 
+        GCMRegistrar.checkDevice(this);
+        GCMRegistrar.checkManifest(this);
 
+
+        //GCMRegistrar.register(this, Config.GOOGLE_SENDER_ID);
+        String regIdNew = "";
+        if (GCMRegistrar.isRegistered(this)) {
+            regIdNew = GCMRegistrar.getRegistrationId(this);
+            Log.e("regIdNew1", regIdNew);
+        } else {
+            GCMRegistrar.register(this, "423097242723");
+            Log.e("regIdNew2", regIdNew);
+        }
+        if (regIdNew.equals("")) {
+            GCMRegistrar.register(this, "423097242723");
+            Log.e("regIdNew3", regIdNew);
+        } else {
+
+        }
+
+
+        String regId1 = regIdNew;
+        REGID = regId1;
+        Log.e("REGID", regId1);
+        Toast.makeText(getApplicationContext(),regId1,Toast.LENGTH_SHORT).show();
+
+        // Check if GCM configuration is set
+        if (Config.YOUR_SERVER_URL == null || Config.GOOGLE_SENDER_ID == null || Config.YOUR_SERVER_URL.length() == 0
+                || Config.GOOGLE_SENDER_ID.length() == 0) {
+
+            // GCM sernder id / server url is missing
+            aController.showAlertDialog(LoginActivityTest.this, "Configuration Error!",
+                    "Please set your Server URL and GCM Sender ID", false);
+
+            // stop executing code by return
+            return;
+        }
         btnEnter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -215,7 +211,7 @@ public class LoginActivity extends AppCompatActivity {
         //String url =  "http://192.168.1.100:8080/gcm_server_php/register.php";
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("email", email);
-        params.put("password", password);
+        params.put("name", password);
         params.put("regId", REGID);
 
 
@@ -228,39 +224,10 @@ public class LoginActivity extends AppCompatActivity {
 
     public void loginCallback(String url, JSONObject json, AjaxStatus status) throws JSONException {
         Log.e("return", json.toString(4));
-
-        int success = json.getInt("success");
-        Log.e("qqqq", json.optInt("success") + "");
-        String id = json.getString("chat_id");
-        String nameHeader = json.getString("name");
-        Log.e("ddd", id);
-        Log.e("aaaaa", nameHeader);
-        if (success == 0) {
-            Toast.makeText(getApplicationContext(), "กรอก Email หรือ Password ผิด", Toast.LENGTH_SHORT).show();
-            loadingDialog.dismiss();
-        }
-        if (success == 1) {
-            loadingDialog.dismiss();
-            Toast.makeText(getApplicationContext(), "เข้าสู่ระบบสำเร็จ", Toast.LENGTH_SHORT).show();
-            Intent intentMain = new Intent(getApplicationContext().getApplicationContext(), MainActivity.class);
-            startActivity(intentMain);
-            finish();
-
-            String email = json.getString("email");
-            String name = json.getString("name");
-            User user = new User(id, name, email);
-
-            // storing user in shared preferences
-            IsmartApp.getInstance().getPrefManager().storeUser(user);
-
-            pref.isLogin().put(true);
-            pref.userName().put(json.getString("username"));
-            pref.vendeName().put(nameHeader);
-            pref.id().put(id);
-            pref.commit();
-
-
-        }
+        Toast.makeText(getApplicationContext(), "เข้าสู่ระบบสำเร็จ", Toast.LENGTH_SHORT).show();
+        Intent intentMain = new Intent(getApplicationContext().getApplicationContext(), MainActivity.class);
+        startActivity(intentMain);
+        finish();
     }
 
 //    private void login() {

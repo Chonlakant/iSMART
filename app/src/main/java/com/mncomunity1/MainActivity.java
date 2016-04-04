@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
@@ -17,42 +18,22 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-
-import com.android.volley.NetworkResponse;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
-import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.mncomunity1.activity.AllCourseActivity;
-import com.mncomunity1.activity.DetailCourseActivity;
-import com.mncomunity1.activity.ListLayer1Activity;
+
+import com.google.android.gcm.GCMRegistrar;
 import com.mncomunity1.activity.ListWebViewActivity;
-import com.mncomunity1.activity.VideoCacheActivity;
-import com.mncomunity1t.R;
 import com.squareup.otto.Subscribe;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import com.mncomunity1.activity.AboutWebViewActivity;
 import com.mncomunity1.activity.ListActivity;
@@ -60,27 +41,21 @@ import com.mncomunity1.activity.LoginActivity;
 import com.mncomunity1.activity.PhotoActivityMian;
 import com.mncomunity1.activity.TrainCourseActivity;
 import com.mncomunity1.adapter.MyRecyclerAdapter;
-import com.mncomunity1.app.Config;
-import com.mncomunity1.app.EndPoints;
 import com.mncomunity1.event.ActivityResultBus;
 import com.mncomunity1.event.ApiBus;
 import com.mncomunity1.event.FeedReceivedEvent;
 import com.mncomunity1.event.FeedRequestedEvent;
 import com.mncomunity1.event.PhotoReceivedEvent;
 import com.mncomunity1.event.PhotoRequestedEvent;
-import com.mncomunity1.gcm.GcmIntentService;
-import com.mncomunity1.gcm.NotificationUtils;
 import com.mncomunity1.model.ChatRoom;
 import com.mncomunity1.model.Message;
 import com.mncomunity1.model.Post;
 import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
-
+    IsmartApp aController;
     AlertDialogManager alert = new AlertDialogManager();
     ConnectionDetector cd;
-    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    private BroadcastReceiver mRegistrationBroadcastReceiver;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
@@ -93,14 +68,10 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
     private String TAG = MainActivity.class.getSimpleName();
     RecyclerView recList;
     ImageView image_view;
-
+    AsyncTask<Void, Void, Void> mRegisterTask;
     String photo1;
-    String photo2;
-    String photo3;
-
-    String title1;
-    String title2;
-    String title3;
+    public static String name;
+    public static String email;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -124,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
         ApiBus.getInstance().postQueue(new FeedRequestedEvent());
         ApiBus.getInstance().postQueue(new PhotoRequestedEvent());
 
-
+        aController = (IsmartApp) getApplicationContext();
         //String selfUserId = IsmartApp.getInstance().getPrefManager().getUser().getId();
         // String selfUserId =  IsmartApp.getInstance().getPrefManagerPaty().id().getOr("");
         String selfUserId = IsmartApp.getInstance().getPrefManagerPaty().vendeName().getOr("");
@@ -141,32 +112,6 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
             launchLoginActivity();
         }
 
-        String email = IsmartApp.getInstance().getPrefManagerPaty().email().getOr("");
-        String name = IsmartApp.getInstance().getPrefManagerPaty().userName().getOr("");
-//        User user = new User(selfUserId, name, email);
-//        IsmartApp.getInstance().getPrefManager().storeUser(user);
-
-        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-
-                // checking for type intent filter
-                if (intent.getAction().equals(Config.REGISTRATION_COMPLETE)) {
-                    // gcm successfully registered
-                    // now subscribe to `global` topic to receive app wide notifications
-                    subscribeToGlobalTopic();
-
-                } else if (intent.getAction().equals(Config.SENT_TOKEN_TO_SERVER)) {
-                    // gcm registration id is stored in our server's MySQL
-                    Log.e(TAG, "GCM registration id is sent to our server");
-
-                } else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
-                    // new push notification is received
-                    handlePushNotification(intent);
-                }
-            }
-        };
-
 
         setupViews();
         recList = (RecyclerView) findViewById(R.id.cardList);
@@ -174,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
-        chatRoomArrayList = new ArrayList<>();
+
 
 
         if (toolbar != null) {
@@ -196,15 +141,109 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
 
             drawerToggle.syncState();
         }
+        Intent i = getIntent();
+
+        name = i.getStringExtra("name");
+        email = i.getStringExtra("email");
+        GCMRegistrar.checkDevice(this);
 
 
-        if (checkPlayServices()) {
-            registerGCM();
-            fetchChatRooms();
+        // Make sure the manifest permissions was properly set
+        GCMRegistrar.checkManifest(this);
+
+        registerReceiver(mHandleMessageReceiver, new IntentFilter(
+                Config.DISPLAY_MESSAGE_ACTION));
+
+
+        // Get GCM registration id
+        final String regId = GCMRegistrar.getRegistrationId(this);
+
+
+        // Check if regid already presents
+        if (regId.equals("")) {
+
+            // Register with GCM
+
+            //Toast.makeText(getApplicationContext(), "regId "+regId , Toast.LENGTH_LONG).show();
+
+            GCMRegistrar.register(this, Config.GOOGLE_SENDER_ID);
+
+        } else {
+
+            // Device is already registered on GCM Server
+            if (GCMRegistrar.isRegisteredOnServer(this)) {
+
+                // Skips registration.
+                //Toast.makeText(getApplicationContext(), "Already registered with GCM Server", Toast.LENGTH_LONG).show();
+
+            } else {
+
+                // Try to register again, but not in the UI thread.
+                // It's also necessary to cancel the thread onDestroy(),
+                // hence the use of AsyncTask instead of a raw thread.
+
+                final Context context = this;
+                mRegisterTask = new AsyncTask<Void, Void, Void>() {
+
+                    @Override
+                    protected Void doInBackground(Void... params) {
+
+                        // Register on our server
+                        // On server creates a new user
+                        //aController.register(context, name, email, regId);
+
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void result) {
+                        mRegisterTask = null;
+                    }
+
+                };
+
+                // execute AsyncTask
+                mRegisterTask.execute(null, null, null);
+            }
         }
+        registerReceiver(mHandleMessageReceiver, new IntentFilter(
+                Config.DISPLAY_MESSAGE_ACTION));
 
     }
 
+    private final BroadcastReceiver mHandleMessageReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String newMessage = intent.getExtras().getString(Config.EXTRA_MESSAGE);
+
+            // Waking up mobile if it is sleeping
+            aController.acquireWakeLock(getApplicationContext());
+
+            // Display message on the screen
+            //lblMessage.append(newMessage + "\n");
+
+            Toast.makeText(getApplicationContext(), "Got Message: " + newMessage, Toast.LENGTH_LONG).show();
+
+
+		/*	webWiew1.getSettings().setJavaScriptEnabled(true);
+			webWiew1.loadUrl(newMessage.toString());
+
+			webWiew1.setWebViewClient(new WebViewClient(){
+
+			    @Override
+			    public boolean shouldOverrideUrlLoading(WebView view, String url){
+			      view.loadUrl(url);
+			      return true;
+			    }
+			});*/
+
+
+            // Releasing wake lock
+            aController.releaseWakeLock();
+        }
+    };
 
     private void setupViews() {
         // navigationView.addHeaderView(new DrawerHeaderView(this));
@@ -431,127 +470,7 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
 
     }
 
-    /**
-     * Handles new push notification
-     */
-    private void handlePushNotification(Intent intent) {
-        int type = intent.getIntExtra("type", -1);
 
-        // if the push is of chat room message
-        // simply update the UI unread messages count
-        if (type == Config.PUSH_TYPE_CHATROOM) {
-            Message message = (Message) intent.getSerializableExtra("message");
-            String chatRoomId = intent.getStringExtra("chat_room_id");
-
-            if (message != null && chatRoomId != null) {
-                updateRow(chatRoomId, message);
-            }
-        } else if (type == Config.PUSH_TYPE_USER) {
-            // push belongs to user alone
-            // just showing the message in a toast
-            Message message = (Message) intent.getSerializableExtra("message");
-            Toast.makeText(getApplicationContext(), "New push: " + message.getMessage(), Toast.LENGTH_LONG).show();
-        }
-
-
-    }
-
-    /**
-     * Updates the chat list unread count and the last message
-     */
-    private void updateRow(String chatRoomId, Message message) {
-        for (ChatRoom cr : chatRoomArrayList) {
-            if (cr.getId().equals(chatRoomId)) {
-                int index = chatRoomArrayList.indexOf(cr);
-                cr.setLastMessage(message.getMessage());
-                cr.setUnreadCount(cr.getUnreadCount() + 1);
-                chatRoomArrayList.remove(index);
-                chatRoomArrayList.add(index, cr);
-                break;
-            }
-        }
-        // mAdapter.notifyDataSetChanged();
-    }
-
-
-    /**
-     * fetching the chat rooms by making http call
-     */
-    private void fetchChatRooms() {
-        StringRequest strReq = new StringRequest(Request.Method.GET,
-                EndPoints.CHAT_ROOMS, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                Log.e(TAG, "response: " + response);
-
-                try {
-                    JSONObject obj = new JSONObject(response);
-
-                    // check for error flag
-                    if (obj.getBoolean("error") == false) {
-                        JSONArray chatRoomsArray = obj.getJSONArray("chat_rooms");
-                        for (int i = 0; i < chatRoomsArray.length(); i++) {
-                            JSONObject chatRoomsObj = (JSONObject) chatRoomsArray.get(i);
-                            ChatRoom cr = new ChatRoom();
-                            cr.setId(chatRoomsObj.getString("chat_room_id"));
-                            cr.setName(chatRoomsObj.getString("name"));
-                            cr.setLastMessage("");
-                            cr.setUnreadCount(0);
-                            cr.setTimestamp(chatRoomsObj.getString("created_at"));
-
-                            chatRoomArrayList.add(cr);
-                        }
-
-                    } else {
-                        // error in fetching chat rooms
-                        Toast.makeText(getApplicationContext(), "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
-                    }
-
-                } catch (JSONException e) {
-                    Log.e(TAG, "json parsing error: " + e.getMessage());
-                    Toast.makeText(getApplicationContext(), "Json parse error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                }
-
-                // mAdapter.notifyDataSetChanged();
-
-                // subscribing to all chat room topics
-                subscribeToAllTopics();
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                NetworkResponse networkResponse = error.networkResponse;
-                //Log.e(TAG, "Volley error: " + error.getMessage() + ", code: " + networkResponse);
-                // Toast.makeText(getApplicationContext(), "Volley error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        //Adding request to request queue
-        IsmartApp.getInstance().addToRequestQueue(strReq);
-    }
-
-    // subscribing to global topic
-    private void subscribeToGlobalTopic() {
-        Intent intent = new Intent(this, GcmIntentService.class);
-        intent.putExtra(GcmIntentService.KEY, GcmIntentService.SUBSCRIBE);
-        intent.putExtra(GcmIntentService.TOPIC, Config.TOPIC_GLOBAL);
-        startService(intent);
-    }
-
-    // Subscribing to all chat room topics
-    // each topic name starts with `topic_` followed by the ID of the chat room
-    // Ex: topic_1, topic_2
-    private void subscribeToAllTopics() {
-        for (ChatRoom cr : chatRoomArrayList) {
-
-            Intent intent = new Intent(this, GcmIntentService.class);
-            intent.putExtra(GcmIntentService.KEY, GcmIntentService.SUBSCRIBE);
-            intent.putExtra(GcmIntentService.TOPIC, "topic_" + cr.getId());
-            startService(intent);
-        }
-    }
 
     private void launchLoginActivity() {
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -565,50 +484,15 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
         super.onResume();
         ActivityResultBus.getInstance().register(this);
         ApiBus.getInstance().register(this);
-        // register GCM registration complete receiver
-        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-                new IntentFilter(Config.REGISTRATION_COMPLETE));
-
-        // register new push message receiver
-        // by doing this, the activity will be notified each time a new message arrives
-        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-                new IntentFilter(Config.PUSH_NOTIFICATION));
-
-        // clearing the notification tray
-        NotificationUtils.clearNotifications();
     }
 
     @Override
     protected void onPause() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
         super.onPause();
         ActivityResultBus.getInstance().unregister(this);
         ApiBus.getInstance().unregister(this);
     }
 
-    // starting the service to register with GCM
-    private void registerGCM() {
-        Intent intent = new Intent(this, GcmIntentService.class);
-        intent.putExtra("key", "register");
-        startService(intent);
-    }
-
-    private boolean checkPlayServices() {
-        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (apiAvailability.isUserResolvableError(resultCode)) {
-                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
-                        .show();
-            } else {
-                Log.i(TAG, "This device is not supported.  Google Play Services not installed!");
-                Toast.makeText(getApplicationContext(), "This device is not supported. Google Play Services not installed!", Toast.LENGTH_LONG).show();
-                finish();
-            }
-            return false;
-        }
-        return true;
-    }
 
     @Subscribe
     public void GetFeed(final FeedReceivedEvent event) {
@@ -688,45 +572,6 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
             Picasso.with(getApplicationContext())
                     .load(photo1)
                     .into(image_view);
-//
-//            Log.e("photo1", photo1);
-//            Log.e("photo2", photo2);
-//            Log.e("photo3", photo3);
-//
-//            title1 = event.getPost().getPost().get(0).getTitle();
-//            title2 = event.getPost().getPost().get(1).getTitle();
-//            title3 = event.getPost().getPost().get(2).getTitle();
-//
-//            HashMap<String, String> url_maps = new HashMap<String, String>();
-//            url_maps.put("รูปที่ 1", "http://ipro-training.com/images/pro1.jpg");
-////                url_maps.put("รูปที่ 2", "http://ipro-training.com/images/pro2.jpg");
-////                url_maps.put("รูปที่ 3", "http://ipro-training.com/images/pro3.jpg");
-//
-//
-//            for (String name : url_maps.keySet()) {
-//                TextSliderView textSliderView = new TextSliderView(this);
-//                // initialize a SliderLayout
-//
-//                textSliderView
-//                        .description(name)
-//                        .image(url_maps.get(name))
-//                        .setScaleType(BaseSliderView.ScaleType.Fit)
-//                        .setOnSliderClickListener(this);
-//
-//                //add your extra information
-//                textSliderView.bundle(new Bundle());
-//                textSliderView.getBundle()
-//                        .putString("extra", name);
-//
-//
-//                mDemoSlider.addSlider(textSliderView);
-//            }
-//            mDemoSlider.setPresetTransformer(SliderLayout.Transformer.DepthPage);
-//            mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-//            mDemoSlider.setCustomAnimation(new DescriptionAnimation());
-//            mDemoSlider.setDuration(10000);
-//            mDemoSlider.addOnPageChangeListener(this);
-
 
         }
 

@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
-import com.mncomunity1t.R;
+import com.mncomunity1.R;
 
 
 public class VolumnController {

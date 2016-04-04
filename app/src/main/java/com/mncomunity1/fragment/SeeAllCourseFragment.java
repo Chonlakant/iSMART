@@ -16,7 +16,7 @@ import com.mncomunity1.event.ActivityResultBus;
 import com.mncomunity1.event.ApiBus;
 import com.mncomunity1.event.QualityRequestedEvent;
 import com.mncomunity1.model.Post;
-import com.mncomunity1t.R;
+import com.mncomunity1.R;
 
 public class SeeAllCourseFragment extends Fragment {
 

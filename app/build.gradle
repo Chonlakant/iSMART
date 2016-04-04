@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
-apply plugin: 'com.google.gms.google-services'
+//apply plugin: 'com.google.gms.google-services'
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -32,8 +32,9 @@ dependencies {
             'com.android.support:recyclerview-v7:22.2.0',
             'com.android.support:cardview-v7:22.2.0',
             'com.android.support:design:22.2.0',
-            'com.android.support:customtabs:23.1.1'
+
     )
+
     compile 'com.squareup.retrofit:retrofit:1.6.1'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.4.0'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
@@ -45,11 +46,14 @@ dependencies {
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.daimajia.slider:library:1.1.5@aar'
     compile 'com.mcxiaoke.volley:library-aar:1.0.0'
-    compile 'com.google.android.gms:play-services:8.3.0'
-   // compile 'it.sephiroth.android.library.imagezoom:imagezoom:+'
+
+      //compile 'com.google.android.gms:play-services:8.3.0'
+    // compile 'it.sephiroth.android.library.imagezoom:imagezoom:+'
     compile 'com.android.support:multidex:1.0.0'
     compile 'com.googlecode.android-query:android-query:0.24.3'
     compile 'com.github.talenguyen:prettysharedpreferences:1.0.2'
     compile 'com.github.danielemaddaluno.androidupdatechecker:library:+'
-
+    compile files('libs/gcm.jar')
+    compile 'org.apache.httpcomponents:httpclient:4.5'
+    compile 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
 }

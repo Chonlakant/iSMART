@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mncomunity1.RoundedTransformation;
-import com.mncomunity1t.R;
+import com.mncomunity1.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

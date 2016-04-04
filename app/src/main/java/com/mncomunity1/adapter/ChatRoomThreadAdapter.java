@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.mncomunity1.Constant;
 import com.mncomunity1.OnLoadMoreListener;
-import com.mncomunity1t.R;
+import com.mncomunity1.R;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;

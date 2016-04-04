@@ -33,7 +33,7 @@ import com.danikula.videocache.FileCache;
 import com.danikula.videocache.HttpProxyCache;
 import com.danikula.videocache.HttpUrlSource;
 import com.danikula.videocache.ProxyCacheException;
-import com.mncomunity1t.R;
+import com.mncomunity1.R;
 import com.squareup.otto.Subscribe;
 
 import java.io.File;
