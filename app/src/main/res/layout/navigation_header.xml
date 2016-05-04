@@ -36,6 +36,7 @@
 
                 <TextView
                     android:id="@+id/username"
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
@@ -213,6 +214,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/Energy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -231,6 +233,29 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="25dp"
                     android:text="Energy Saving"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#000"
+                    android:textSize="18dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/Vocabulary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/circled" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="25dp"
+                    android:text="Technical Vocabulary"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="#000"
                     android:textSize="18dp" />
@@ -308,7 +333,29 @@
                     android:textColor="#000"
                     android:textSize="18dp" />
             </LinearLayout>
+            <LinearLayout
+                android:id="@+id/Chat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:orientation="horizontal">
 
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/circled" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="25dp"
+                    android:text="Chat"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#000"
+                    android:textSize="18dp" />
+            </LinearLayout>
             <LinearLayout
                 android:id="@+id/Log"
                 android:layout_width="match_parent"

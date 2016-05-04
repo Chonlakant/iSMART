@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -10,22 +10,49 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/tool_bar" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/linearLayout2">
+
+            <include layout="@layout/tool_bar" />
+
+
+        </LinearLayout>
+
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/cardList_main"
-            android:layout_marginTop="58dp"
+            android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_marginTop="100dp" />
+        <ListView
+            android:id="@+id/listview"
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="100dp" />
 
         <ProgressBar
+            android:id="@+id/progressBar3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/progressBar3"
-            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editSearch"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:hint="ค้นหา"
+            android:layout_below="@+id/linearLayout2"
             android:layout_centerHorizontal="true" />
     </RelativeLayout>
 
 
-
-</RelativeLayout>
+</LinearLayout>

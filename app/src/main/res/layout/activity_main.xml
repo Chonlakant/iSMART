@@ -46,10 +46,10 @@
 
                         <TextView
                             android:id="@+id/textView14"
-                            android:layout_marginTop="3dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
+                            android:layout_marginTop="3dp"
                             android:text="Maintenance Community"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#000"
@@ -62,33 +62,52 @@
 
                 <com.daimajia.slider.library.SliderLayout
                     android:id="@+id/slider"
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="180dp"
+                    android:visibility="gone"
                     custom:auto_cycle="true"
                     custom:indicator_visibility="visible"
                     custom:pager_animation="Accordion"
                     custom:pager_animation_span="1100" />
 
                 <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="180dp">
+                    android:layout_height="160dp">
 
                     <ImageView
                         android:id="@+id/image_view"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
 
+
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/textview_noti"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal" />
                 </LinearLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/cardList"
+                    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/swipeContainer"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent">
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/cardList"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </android.support.v4.widget.SwipeRefreshLayout>
 
                     <ProgressBar
                         android:id="@+id/progressBar2"

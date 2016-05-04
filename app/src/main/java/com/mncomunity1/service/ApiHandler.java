@@ -3,6 +3,8 @@ package com.mncomunity1.service;
 import android.content.Context;
 import android.util.Log;
 
+import com.mncomunity1.event.VocabularyReceivedEvent;
+import com.mncomunity1.event.VocabularyRequestedEvent;
 import com.squareup.otto.Subscribe;
 
 import com.mncomunity1.event.ApiBus;
@@ -315,7 +317,7 @@ public class ApiHandler {
             @Override
             public void success(Post post, Response response) {
                 ApiBus.getInstance().postQueue(new TipReceivedEvent(post));
-                Log.e("aaaa",post.getPost().size()+"");
+                Log.e("aaaa", post.getPost().size() + "");
             }
 
             @Override
@@ -331,7 +333,7 @@ public class ApiHandler {
             @Override
             public void success(Post post, Response response) {
                 ApiBus.getInstance().postQueue(new TraingReceivedEvent(post));
-                Log.e("ddddd",post.getPost().size()+"");
+                Log.e("ddddd", post.getPost().size() + "");
             }
 
             @Override
@@ -379,6 +381,25 @@ public class ApiHandler {
 
                 for (int i = 1; i < post.getPost().size(); i++) {
                     ApiBus.getInstance().postQueue(new TraingReceivedEvent(post));
+                }
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+    @Subscribe
+    public void onVocabulary(final VocabularyRequestedEvent event) {
+        api.getVocabulary(event.getVendor(), new Callback<Post>() {
+            @Override
+            public void success(Post post, Response response) {
+                if(post != null){
+                    Log.e("Vpsdsddssd,m",post.getPost().size()+"");
+                    ApiBus.getInstance().postQueue(new VocabularyReceivedEvent(post));
                 }
 
             }

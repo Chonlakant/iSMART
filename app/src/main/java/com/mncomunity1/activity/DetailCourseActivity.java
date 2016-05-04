@@ -62,7 +62,7 @@ public class DetailCourseActivity extends AppCompatActivity implements CacheList
     DetailRecyclerAdapter detailRecyclerAdapter;
     List<Post> list = new ArrayList<>();
 
-    private static final String LOG_TAG = "VideoActivity";
+    private static final String LOG_TAG ="" ;
     private static String VIDEO_CACHE_NAME ="http://mn-community.com/video/Commu.mp4";
     private static  String VIDEO_URL = "http://mn-community.com/video/Commu.mp4";
 

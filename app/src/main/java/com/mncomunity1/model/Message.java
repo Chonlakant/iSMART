@@ -1,21 +1,23 @@
 package com.mncomunity1.model;
 
 import java.io.Serializable;
+import java.io.Serializable;
 
+/**
+ * Created by Lincoln on 07/01/16.
+ */
 public class Message implements Serializable {
-    String id, message, createdAt,imagUrl,status;
+    String id, message, createdAt;
     User user;
 
     public Message() {
     }
 
-    public Message(String id, String message, String createdAt, User user , String imagUrl, String status) {
+    public Message(String id, String message, String createdAt, User user) {
         this.id = id;
         this.message = message;
         this.createdAt = createdAt;
         this.user = user;
-        this.imagUrl = imagUrl;
-        this.status = status;
     }
 
     public String getId() {
@@ -49,20 +51,5 @@ public class Message implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
-
-    public String getImagUrl() {
-        return imagUrl;
-    }
-
-    public void setImagUrl(String imagUrl) {
-        this.imagUrl = imagUrl;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 }
+

@@ -56,6 +56,9 @@ public interface ApiService {
     @GET("/community_service/select_success.php")
     void getSuccess(@Query("user")String id,Callback<Post> callback);
 
+    @GET("/community_service/select_vocabulary.php")
+    void getVocabulary(@Query("user")String id,Callback<Post> callback);
+
 
     @GET("/community_service/select_feed.php")
     void getFeed(Callback<Post> callback);
