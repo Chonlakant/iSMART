@@ -4,8 +4,10 @@ import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
@@ -33,12 +35,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.mncomunity1.AlertDialogManager;
 import com.mncomunity1.ConnectionDetector;
 import com.mncomunity1.IsmartApp;
 import com.mncomunity1.MainActivity;
 import com.mncomunity1.PrefManager;
 
+import com.mncomunity1.gcm.GcmIntentService;
 import com.mncomunity1.model.ChatRoom;
 import com.mncomunity1.model.Message;
 import com.mncomunity1.model.User;
@@ -49,7 +54,6 @@ public class RegisterActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private EditText edit_email, edit_pass, con_password, edit_name, edit_phone, edit_company;
     String email, pass, name, phone, company;
-    private ArrayList<ChatRoom> chatRoomArrayList;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private AQuery aq;
     String regId;
@@ -61,7 +65,8 @@ public class RegisterActivity extends AppCompatActivity {
     ConnectionDetector cd;
     String con;
     String edcondeStringName;
-
+    SharedPreferences prefs ;
+    String REGID = "";
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_item_list, menu);
@@ -85,7 +90,7 @@ public class RegisterActivity extends AppCompatActivity {
         btn_register = (Button) findViewById(R.id.btn_register);
         cd = new ConnectionDetector(getApplicationContext());
         aq = new AQuery(getApplicationContext());
-
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
         // Check if Internet present
         if (!cd.isConnectingToInternet()) {
             // Internet Connection is not present
@@ -102,6 +107,9 @@ public class RegisterActivity extends AppCompatActivity {
 //        }else{
 //            Log.e("aaaa","ddd");
 //        }
+        if (checkPlayServices()) {
+            registerGCM();
+        }
 
         loadingDialog = new Dialog(RegisterActivity.this, R.style.FullHeightDialog);
         loadingDialog.setContentView(R.layout.dialog_loading);
@@ -158,7 +166,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                    onLoginButtonClick();
+                onLoginButtonClick();
 
             }
         });
@@ -171,7 +179,7 @@ public class RegisterActivity extends AppCompatActivity {
         email = edit_email.getText().toString();
         pass = edit_pass.getText().toString();
         name = edit_name.getText().toString();
-
+        REGID = prefs.getString("token", "");
 
         try {
             edcondeStringName = URLDecoder.decode("", "UTF-8");
@@ -222,7 +230,7 @@ public class RegisterActivity extends AppCompatActivity {
         params.put("email", email);
         params.put("password", pass);
         params.put("tel", phone);
-        params.put("regId", regId);
+        params.put("regId",REGID);
 
 
         AjaxCallback<JSONObject> cb = new AjaxCallback<JSONObject>();
@@ -271,6 +279,29 @@ public class RegisterActivity extends AppCompatActivity {
             pref.commit();
 
         }
+    }
+    // starting the service to register with GCM
+    private void registerGCM() {
+        Intent intent = new Intent(this, GcmIntentService.class);
+        intent.putExtra("key", "register");
+        startService(intent);
+    }
+
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                Log.i("", "This device is not supported. Google Play Services not installed!");
+                Toast.makeText(getApplicationContext(), "This device is not supported. Google Play Services not installed!", Toast.LENGTH_LONG).show();
+                finish();
+            }
+            return false;
+        }
+        return true;
     }
 
     @Override

@@ -25,13 +25,13 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/cardList_main"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="100dp" />
         <ListView
             android:id="@+id/listview"
-            android:visibility="visible"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="100dp" />
@@ -44,6 +44,7 @@
             android:layout_centerVertical="true" />
 
         <EditText
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/editSearch"

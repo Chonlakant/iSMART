@@ -1,41 +1,47 @@
 package com.mncomunity1.activity;
 
-import android.app.Dialog;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-import com.androidquery.AQuery;
-import com.androidquery.callback.AjaxCallback;
-import com.androidquery.callback.AjaxStatus;
-import com.google.android.gcm.GCMRegistrar;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
+        import android.app.Dialog;
+        import android.content.BroadcastReceiver;
+        import android.content.Intent;
+        import android.content.SharedPreferences;
+        import android.os.Bundle;
+        import android.os.Handler;
+        import android.preference.PreferenceManager;
+        import android.support.v7.app.AppCompatActivity;
+        import android.support.v7.widget.Toolbar;
+        import android.text.Editable;
+        import android.text.TextUtils;
+        import android.text.TextWatcher;
+        import android.util.Log;
+        import android.view.View;
+        import android.widget.Button;
+        import android.widget.EditText;
+        import android.widget.TextView;
+        import android.widget.Toast;
+        import com.androidquery.AQuery;
+        import com.androidquery.callback.AjaxCallback;
+        import com.androidquery.callback.AjaxStatus;
 
 
-import com.madx.updatechecker.lib.UpdateRunnable;
-import com.mncomunity1.AlertDialogManager;
-import com.mncomunity1.Config;
-import com.mncomunity1.ConnectionDetector;
-import com.mncomunity1.IsmartApp;
-import com.mncomunity1.MainActivity;
-import com.mncomunity1.PrefManager;
-import com.mncomunity1.model.User;
-import com.mncomunity1.R;
+        import org.json.JSONException;
+        import org.json.JSONObject;
+
+        import java.util.HashMap;
+        import java.util.Map;
+
+
+        import com.google.android.gms.common.ConnectionResult;
+        import com.google.android.gms.common.GoogleApiAvailability;
+        import com.madx.updatechecker.lib.UpdateRunnable;
+        import com.mncomunity1.AlertDialogManager;
+        import com.mncomunity1.Config;
+        import com.mncomunity1.ConnectionDetector;
+        import com.mncomunity1.IsmartApp;
+        import com.mncomunity1.MainActivity;
+        import com.mncomunity1.PrefManager;
+        import com.mncomunity1.gcm.GcmIntentService;
+        import com.mncomunity1.model.User;
+        import com.mncomunity1.R;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -51,6 +57,11 @@ public class LoginActivity extends AppCompatActivity {
     String email;
     String password;
     String REGID = "";
+    SharedPreferences prefs ;
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    boolean islogin;
+    boolean isRegister;
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +75,8 @@ public class LoginActivity extends AppCompatActivity {
         aq = new AQuery(this);
         pref = IsmartApp.getPrefManagerPaty();
         final IsmartApp aController = (IsmartApp) getApplicationContext();
-
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Log.e("islogin",islogin+"");
         // Check if Internet present
         if (!cd.isConnectingToInternet()) {
             // Internet Connection is not present
@@ -72,47 +84,21 @@ public class LoginActivity extends AppCompatActivity {
             // stop executing code by return
             return;
         }
-        GCMRegistrar.checkDevice(this);
-        GCMRegistrar.checkManifest(this);
 
+        isRegister = prefs.getBoolean("islogin", false);
+        Log.e("isRegister",isRegister+"");
+        if(isRegister!=false){
 
-
-        //GCMRegistrar.register(this, Config.GOOGLE_SENDER_ID);
-        String regIdNew = "";
-        if (GCMRegistrar.isRegistered(this)) {
-            regIdNew = GCMRegistrar.getRegistrationId(this);
-            Log.e("regIdNew1", regIdNew);
-        } else {
-            GCMRegistrar.register(this, Config.GOOGLE_SENDER_ID);
-            Log.e("regIdNew2", regIdNew);
-        }
-        if (regIdNew.equals("")) {
-            GCMRegistrar.register(this, Config.GOOGLE_SENDER_ID);
-            Log.e("regIdNew3", regIdNew);
-        } else {
-
+        }else{
+            Toast.makeText(getApplicationContext(),"OK Google",Toast.LENGTH_SHORT).show();
+            if (checkPlayServices()) {
+                registerGCM();
+            }
         }
 
 
-        String regId1 = regIdNew;
-        REGID = regId1;
-        Log.e("REGID",regId1);
-        Toast.makeText(getApplicationContext(),regId1,Toast.LENGTH_SHORT).show();
-        // Toast.makeText(getBaseContext(), "Got Message: check "+regIdNew , Toast.LENGTH_LONG).show();
 
-        // Check if GCM configuration is set
-        if (Config.YOUR_SERVER_URL == null || Config.GOOGLE_SENDER_ID == null || Config.YOUR_SERVER_URL.length() == 0
-                || Config.GOOGLE_SENDER_ID.length() == 0) {
-
-            // GCM sernder id / server url is missing
-            aController.showAlertDialog(LoginActivity.this, "Configuration Error!",
-                    "Please set your Server URL and GCM Sender ID", false);
-
-            // stop executing code by return
-            return;
-        }
-
-
+        islogin = prefs.getBoolean("islogin", false);
         loadingDialog = new Dialog(LoginActivity.this, R.style.FullHeightDialog);
         textView13 = (TextView) findViewById(R.id.textView13);
         loadingDialog.setContentView(R.layout.dialog_loading);
@@ -154,7 +140,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-              //  Is_Valid_Email(inputEmail);
+                //  Is_Valid_Email(inputEmail);
             }
 
             public void Is_Valid_Email(EditText edt) {
@@ -196,7 +182,7 @@ public class LoginActivity extends AppCompatActivity {
     private void onLoginButtonClick() {
         email = inputEmail.getText().toString();
         password = inputPass.getText().toString();
-
+        REGID = prefs.getString("token", "");
         Log.e("ttt", REGID);
         Log.e("email", email);
         Log.e("password", password);
@@ -217,7 +203,11 @@ public class LoginActivity extends AppCompatActivity {
         params.put("email", email);
         params.put("password", password);
         params.put("regId", REGID);
+        IsmartApp.getInstance().getPrefManagerPaty().isLogin().put(true).commit();
 
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean("islogin", true);
+        editor.commit();
 
         AjaxCallback<JSONObject> cb = new AjaxCallback<JSONObject>();
         cb.url(url).type(JSONObject.class).params(params).weakHandler(this, "loginCallback");
@@ -250,6 +240,12 @@ public class LoginActivity extends AppCompatActivity {
             String name = json.getString("name");
             User user = new User(id, name, email);
 
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("chatId", id);
+            editor.putString("name", name);
+            editor.putBoolean("islogin", true);
+            editor.commit();
+
             // storing user in shared preferences
             IsmartApp.getInstance().getPrefManager().storeUser(user);
 
@@ -263,147 +259,29 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-//    private void login() {
-//        if (!validateName()) {
-//            return;
-//        }
-//
-//        if (!validateEmail()) {
-//            return;
-//        }
-//
-//        final String name = inputName.getText().toString();
-//        final String email = inputEmail.getText().toString();
-//
-//        StringRequest strReq = new StringRequest(Request.Method.POST,
-//                "http://mn-community.com/web/login_all.php", new Response.Listener<String>() {
-//
-//            @Override
-//            public void onResponse(String response) {
-//                Log.e(TAG, "response_Login: " + response);
-//
-//                try {
-//                    JSONObject obj = new JSONObject(response);
-//
-//                    // check for error flag
-//                    if (obj.getBoolean("error") == false) {
-//                        // user successfully logged in
-//
-//                        JSONObject userObj = obj.getJSONObject("user");
-//                        User user = new User(userObj.getString("user_id"),
-//                                userObj.getString("name"),
-//                                userObj.getString("email"));
-//
-//                        // storing user in shared preferences
-//                        IsmartApp.getInstance().getPrefManager().storeUser(user);
-//
-//                        // start main activity
-//                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-//                        finish();
-//
-//                    } else {
-//                        // login error - simply toast the message
-//                        Toast.makeText(getApplicationContext(), "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
-//                    }
-//
-//                } catch (JSONException e) {
-//                    Log.e(TAG, "json parsing error: " + e.getMessage());
-//                    Toast.makeText(getApplicationContext(), "Json parse error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                NetworkResponse networkResponse = error.networkResponse;
-//                Log.e(TAG, "Volley error: " + error.getMessage() + ", code: " + networkResponse);
-//                Toast.makeText(getApplicationContext(), "Volley error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-//            }
-//        }) {
-//
-//            @Override
-//            protected Map<String, String> getParams() {
-//                Map<String, String> params = new HashMap<>();
-//                params.put("email", name);
-//                params.put("password", email);
-//                params.put("regId", regId);
-//
-//                Log.e(TAG, "params: " + params.toString());
-//                return params;
-//            }
-//        };
-//
-//        //Adding request to request queue
-//        IsmartApp.getInstance().addToRequestQueue(strReq);
-//    }
+    // starting the service to register with GCM
+    private void registerGCM() {
+        Intent intent = new Intent(this, GcmIntentService.class);
+        intent.putExtra("key", "register");
+        startService(intent);
+    }
 
-//    private void requestFocus(View view) {
-//        if (view.requestFocus()) {
-//            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-//        }
-//    }
-//
-//    // Validating name
-//    private boolean validateName() {
-//        if (inputEmail.getText().toString().trim().isEmpty()) {
-//            inputLayoutName.setError(getString(R.string.err_msg_name));
-//            requestFocus(inputName);
-//            return false;
-//        } else {
-//            inputLayoutName.setErrorEnabled(false);
-//        }
-//
-//        return true;
-//    }
-//
-//    // Validating email
-//    private boolean validateEmail() {
-//        String email = inputEmail.getText().toString().trim();
-//
-//        if (email.isEmpty() || !isValidEmail(email)) {
-//            inputLayoutEmail.setError(getString(R.string.err_msg_email));
-//            requestFocus(inputEmail);
-//            return false;
-//        } else {
-//            inputLayoutEmail.setErrorEnabled(false);
-//        }
-//
-//        return true;
-//    }
-//
-//    private static boolean isValidEmail(String email) {
-//        return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
-//    }
-//
-//    private class MyTextWatcher implements TextWatcher {
-//
-//        private View view;
-//
-//        private MyTextWatcher(View view) {
-//            this.view = view;
-//        }
-//
-//        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//        }
-//
-//        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//        }
-//
-//        public void afterTextChanged(Editable editable) {
-//            switch (view.getId()) {
-//                case R.id.input_name:
-//                    validateName();
-//                    break;
-//                case R.id.input_email:
-//                    validateEmail();
-//                    break;
-//            }
-//        }
-//    }
-
-
-
-
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                Log.i("", "This device is not supported. Google Play Services not installed!");
+                Toast.makeText(getApplicationContext(), "This device is not supported. Google Play Services not installed!", Toast.LENGTH_LONG).show();
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
 
 
 }

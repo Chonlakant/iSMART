@@ -60,15 +60,6 @@
                 </android.support.v7.widget.Toolbar>
 
 
-                <com.daimajia.slider.library.SliderLayout
-                    android:id="@+id/slider"
-                    android:layout_width="match_parent"
-                    android:layout_height="180dp"
-                    android:visibility="gone"
-                    custom:auto_cycle="true"
-                    custom:indicator_visibility="visible"
-                    custom:pager_animation="Accordion"
-                    custom:pager_animation_span="1100" />
 
                 <LinearLayout
                     android:orientation="vertical"

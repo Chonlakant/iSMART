@@ -351,7 +351,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="25dp"
-                    android:text="Chat"
+                    android:text="Online Chat"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="#000"
                     android:textSize="18dp" />

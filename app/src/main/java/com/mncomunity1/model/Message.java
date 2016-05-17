@@ -1,7 +1,6 @@
 package com.mncomunity1.model;
 
 import java.io.Serializable;
-import java.io.Serializable;
 
 /**
  * Created by Lincoln on 07/01/16.
@@ -52,4 +51,3 @@ public class Message implements Serializable {
         this.user = user;
     }
 }
-

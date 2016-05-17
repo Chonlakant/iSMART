@@ -2,95 +2,106 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mncomunity1">
 
-    <!-- GCM connects to Internet Services. -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- GCM requires a Google account. -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <!--
+     needed for older devices -
+     used to check app background / foreground status
+    -->
+    <uses-permission android:name="android.permission.GET_TASKS" />
 
-    <!-- Keeps the processor from sleeping when a message is received. -->
+    <!-- START Added for GCM -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <!-- Creates a custom permission so only this app can receive its messages. -->
     <permission
         android:name="com.mncomunity1.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-
     <uses-permission android:name="com.mncomunity1.permission.C2D_MESSAGE" />
 
-    <!-- This app has permission to register and receive data message. -->
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-
-    <!-- Network State Permissions to detect Internet status -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <!-- Permission to vibrate -->
-    <uses-permission android:name="android.permission.VIBRATE" />
-
+    <!-- END Added for GCM -->
     <application
-
         android:name=".IsmartApp"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.WithoutActionBar">
-        <activity android:name="com.mncomunity1.activity.Splash">
+        <activity android:name=".activity.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver
-            android:name="com.google.android.gcm.GCMBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND" >
-            <intent-filter>
 
-                <!-- Receives the actual messages. -->
+        <!-- START Added for GCM -->
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <!-- Receives the registration id. -->
-                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
                 <category android:name="com.mncomunity1" />
             </intent-filter>
         </receiver>
-        <service android:name=".GCMIntentService" />
 
-        <activity android:name="com.mncomunity1.activity.MyCourseActivity" />
-        <activity android:name="com.mncomunity1.activity.MainActivityTap" />
-        <activity android:name="com.mncomunity1.activity.AllCourseActivity" />
-        <activity android:name="com.mncomunity1.activity.VideoCacheActivity" />
-        <activity android:name="com.mncomunity1.activity.SeeAllCourseActivity" />
-        <activity android:name="com.mncomunity1.activity.DetailCourseActivity" />
-        <activity android:name="com.mncomunity1.activity.SettingActivity" />
-        <activity android:name="com.mncomunity1.activity.LoginActivity"/>
+        <service
+            android:name=".gcm.MyGcmPushReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".gcm.GcmIntentService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
+            </intent-filter>
+        </service>
 
-        <activity android:name="com.mncomunity1.MainActivity" />
+        <!-- END Added for GCM -->
 
-        <activity android:name="com.mncomunity1.activity.PhotoActivity"/>
-        <activity android:name="com.mncomunity1.activity.ListWebViewActivity"/>
-        <activity android:name="com.mncomunity1.activity.ListLayer1Activity"/>
-        <activity android:name="com.mncomunity1.activity.TrainCourseActivity"/>
-        <activity android:name="com.mncomunity1.activity.RegisterActivity"/>
-        <activity android:name="com.mncomunity1.activity.AboutWebViewActivity"/>
-        <activity android:name="com.mncomunity1.activity.PhotoActivityMian"/>
-        <activity android:name="com.mncomunity1.activity.ForgetActivity"/>
-
-
-        <activity android:name="com.mncomunity1.activity.ListActivity"/>
-
-        <activity
-            android:name="com.mncomunity1.activity.Share" >
+        <activity android:name=".activity.MyCourseActivity" />
+        <activity android:name=".activity.MainActivityTap" />
+        <activity android:name=".activity.AllCourseActivity" />
+        <activity android:name=".activity.SeeAllCourseActivity" />
+        <activity android:name=".activity.SettingActivity" />
+        <activity android:name=".activity.LoginActivity" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".activity.PhotoActivity" />
+        <activity android:name=".activity.ListWebViewActivity" />
+        <activity android:name=".activity.ListLayer1Activity" />
+        <activity android:name=".activity.TrainCourseActivity" />
+        <activity android:name=".activity.RegisterActivity" />
+        <activity android:name=".activity.AboutWebViewActivity" />
+        <activity android:name=".activity.PhotoActivityMian" />
+        <activity android:name=".activity.ForgetActivity" />
+        <activity android:name=".activity.ListActivity" />
+        <activity android:name=".activity.Share">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="text/plain" />
                 <data android:mimeType="image/*" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.LoginActivityTest"/>
-
+        <activity
+            android:name=".activity.ChatRoomActivityOri"
+            android:label="@string/title_activity_chat_room_discussion"
+            android:parentActivityName=".activity.ChatRoomActivityOri"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.ChatRoomActivityOri" />
+        </activity>
+        <activity
+            android:name=".activity.ActivityUpdateToken"
+            android:label="@string/title_activity_activity_update_token"
+            android:theme="@style/AppTheme.WithoutActionBar"></activity>
 
     </application>
 

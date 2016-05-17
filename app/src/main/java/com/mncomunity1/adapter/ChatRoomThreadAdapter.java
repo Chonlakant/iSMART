@@ -5,13 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mncomunity1.Constant;
-import com.mncomunity1.OnLoadMoreListener;
 import com.mncomunity1.R;
-import com.squareup.picasso.Picasso;
+import com.mncomunity1.model.Message;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.mncomunity1.model.Message;
 
 public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -28,34 +24,17 @@ public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private String userId;
     private int SELF = 100;
     private static String today;
-    private OnItemClickListener mItemClickListener;
+
     private Context mContext;
     private ArrayList<Message> messageArrayList;
-    private OnLoadMoreListener onLoadMoreListener;
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView message, timestamp;
-        ImageView image_content;
 
         public ViewHolder(View view) {
             super(view);
             message = (TextView) itemView.findViewById(R.id.message);
             timestamp = (TextView) itemView.findViewById(R.id.timestamp);
-            image_content = (ImageView) itemView.findViewById(R.id.image_content);
-            image_content.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-
-            switch (v.getId()) {
-                case R.id.image_content:
-                    if (mItemClickListener != null) {
-                        mItemClickListener.onItemClick(v, getPosition());
-                    }
-                    break;
-            }
-
-
         }
     }
 
@@ -103,33 +82,19 @@ public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         Message message = messageArrayList.get(position);
-        String imageUrl = message.getImagUrl();
-        String url = Constant.enPointh + imageUrl;
-        String timestamp = getTimeStamp(message.getCreatedAt());
-        String status = message.getStatus();
-
-        //Log.e("status", url);
         ((ViewHolder) holder).message.setText(message.getMessage());
-        Picasso.with(mContext.getApplicationContext())
-                .load(url)
-                .into(((ViewHolder) holder).image_content);
+
+        String timestamp = getTimeStamp(message.getCreatedAt());
+
         if (message.getUser().getName() != null)
             timestamp = message.getUser().getName() + ", " + timestamp;
+
         ((ViewHolder) holder).timestamp.setText(timestamp);
-
-
     }
 
     @Override
     public int getItemCount() {
         return messageArrayList.size();
-    }
-    public interface OnItemClickListener {
-        void onItemClick(View view, int position);
-    }
-
-    public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
-        this.mItemClickListener = mItemClickListener;
     }
 
     public static String getTimeStamp(String dateStr) {

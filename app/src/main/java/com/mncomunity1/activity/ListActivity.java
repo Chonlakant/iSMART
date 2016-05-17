@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.mncomunity1.R;
+import com.mncomunity1.event.VocabularyReceivedEvent;
+import com.mncomunity1.event.VocabularyRequestedEvent;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -68,6 +70,8 @@ public class ListActivity extends AppCompatActivity {
     ListCourseRecyclerAdapter whRecyclerAdapter;
     ListCourseRecyclerAdapter tipRecyclerAdapter;
 
+    ListCourseRecyclerAdapter VcabRecyclerAdapter;
+
     ArrayList<Post> list = new ArrayList<>();
     ArrayList<Post> listNews = new ArrayList<>();
     ArrayList<Post> listEnningy = new ArrayList<>();
@@ -82,6 +86,7 @@ public class ListActivity extends AppCompatActivity {
     ArrayList<Post> listwh = new ArrayList<>();
     ArrayList<Post> listtip = new ArrayList<>();
     ArrayList<Post> listMainten = new ArrayList<>();
+    ArrayList<Post> listVocab = new ArrayList<>();
     RecyclerView recList;
 
 
@@ -181,6 +186,27 @@ public class ListActivity extends AppCompatActivity {
 
             }
             ApiBus.getInstance().postQueue(new TipRequestedEvent("dd"));
+        }
+
+        if (cat.equals("6")) {
+            Log.e("cat", cat);
+            if (toolbar != null) {
+                setSupportActionBar(toolbar);
+                getSupportActionBar().setTitle("Technical Vocabulary");
+                toolbar.setTitleTextColor(Color.BLACK);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setDisplayShowHomeEnabled(true);
+                getSupportActionBar().setHomeButtonEnabled(true);
+
+                toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                });
+
+            }
+            ApiBus.getInstance().postQueue(new VocabularyRequestedEvent("aa"));
         }
 
         if (cat.equals("4")) {
@@ -782,6 +808,34 @@ public class ListActivity extends AppCompatActivity {
                 public void onItemClick(View view, int position) {
                     String link = listtip.get(position).getPost().get(position).getLink();
                     String title = listtip.get(position).getPost().get(position).getTitle();
+                    Log.e("bbbb", link + title);
+                    Intent i = new Intent(getApplicationContext(), ListWebViewActivity.class);
+                    i.putExtra("link", link);
+                    i.putExtra("title",title);
+                    startActivity(i);
+                }
+            });
+
+        }
+
+
+    }
+
+    @Subscribe
+    public void GetTipVocab(final VocabularyReceivedEvent event) {
+        if (event != null) {
+            progressBar3.setVisibility(View.GONE);
+            for (int i = 0; i < event.getPost().getPost().size(); i++) {
+                listVocab.add(event.getPost());
+                VcabRecyclerAdapter = new ListCourseRecyclerAdapter(getApplicationContext(), listVocab);
+                recList.setAdapter(VcabRecyclerAdapter);
+            }
+
+            VcabRecyclerAdapter.SetOnItemVideiosClickListener(new ListCourseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    String link = listVocab.get(position).getPost().get(position).getLink();
+                    String title = listVocab.get(position).getPost().get(position).getTitle();
                     Log.e("bbbb", link + title);
                     Intent i = new Intent(getApplicationContext(), ListWebViewActivity.class);
                     i.putExtra("link", link);
